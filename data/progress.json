@@ -1,10 +1,11 @@
 {
     "subject": "Python",
-    "day": 4,
-    "current_topic": "Input and Output",
+    "day": 5,
+    "current_topic": "Type Casting",
     "completed": [
         "Variables",
         "Data Types",
-        "Input and Output"
+        "Input and Output",
+        "Type Casting"
     ]
 }
