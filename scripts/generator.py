@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+from readme_updater import update_readme
 from dotenv import load_dotenv
 from topic_selector import get_next_topic
 from git_manager import git_commit_and_push
@@ -152,6 +153,8 @@ output_file = (
 
 with open(output_file, "w", encoding="utf-8") as f:
     f.write(lesson)
+
+update_readme()
 
 print("✅ Lesson generated successfully!")
 print(f"📚 Subject : {subject}")

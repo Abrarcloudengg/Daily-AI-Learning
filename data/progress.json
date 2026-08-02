@@ -1,12 +1,13 @@
 {
     "subject": "Python",
-    "day": 6,
-    "current_topic": "Operators",
+    "day": 7,
+    "current_topic": "Conditional Statements",
     "completed": [
         "Variables",
         "Data Types",
         "Input and Output",
         "Type Casting",
-        "Operators"
+        "Operators",
+        "Conditional Statements"
     ]
 }
