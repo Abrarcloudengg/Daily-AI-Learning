@@ -3,179 +3,235 @@
 ## Learning Objectives
 
 By the end of this lesson, you will be able to:
-- Understand what variables are and their purpose in programming
-- Declare and assign variables in Python
-- Work with different data types in variables
-- Identify naming conventions and best practices
-- Handle variable scope and lifetime
-- Apply advanced variable concepts like unpacking and dynamic typing
-- Solve real-world problems using variables
+- Understand what variables are and their role in programming
+- Declare and initialize variables in Python
+- Differentiate between various data types and variable naming conventions
+- Apply variable scoping rules and understand memory management
+- Use advanced variable concepts like unpacking and type hints
+- Debug common variable-related issues
+- Write clean, efficient code using proper variable practices
 
 ## Prerequisites
 
+Before starting this lesson, you should have:
 - Basic understanding of Python syntax
 - Python installed on your system
-- Text editor or IDE for coding
-- Fundamental knowledge of data types (strings, numbers, booleans)
+- Knowledge of basic data types (int, float, string, boolean)
+- Understanding of basic programming concepts
+- Familiarity with Python's print() function
 
 ## What is Variables?
 
-A variable is a named storage location in computer memory that holds data which can be changed during program execution. Think of a variable as a container or a box that can hold different values. In Python, variables are used to store information that can be referenced and manipulated throughout your program.
+A variable is a named storage location in computer memory that holds data which can be changed during program execution. Think of variables as containers that store information for later use in your program. Each variable has:
+- A name (identifier)
+- A value (the data it holds)
+- A data type (what kind of data it can store)
+- A memory location
 
-Variables in Python are dynamically typed, meaning you don't need to declare their type explicitly - Python figures it out based on the value assigned.
+In Python, variables are dynamically typed, meaning you don't need to declare their type explicitly - Python figures it out automatically.
 
 ## Why is it Important?
 
 Variables are fundamental to programming because they:
-- Allow programs to store and manipulate data
-- Make code more readable and maintainable
-- Enable dynamic behavior in applications
-- Reduce code duplication by reusing values
-- Facilitate complex calculations and data processing
-- Support the creation of interactive and responsive programs
+- Enable data storage and manipulation
+- Make programs dynamic and interactive
+- Allow code reusability and maintainability
+- Facilitate complex calculations and logic
+- Enable user input processing
+- Support data persistence within program execution
+- Make code more readable and organized
+
+Without variables, programs would be static and unable to process different inputs or maintain state.
 
 ## Real World Analogy
 
 Think of variables like labeled boxes in a warehouse:
 - Each box has a unique label (variable name)
-- The box can contain different items (values) at different times
-- You can access the contents by referring to the label
-- The warehouse worker (Python interpreter) knows what's in each box
-- Boxes can be rearranged, emptied, or filled with new items
+- The box can contain different items (values)
+- You can change what's inside the box (reassign values)
+- You can look inside to see what's there (access values)
+- The size of the box determines what it can hold (data type)
+- Boxes can be moved around and used in different contexts (scope)
+
+Just like you'd label a box "Winter Clothes" to easily find winter clothing, you name a variable `user_age` to store and access age information.
 
 ## Theory
 
-In Python, variables work based on the following principles:
+### Variable Fundamentals
 
-1. **Dynamic Typing**: Variables don't have fixed types; their type is determined by the value they hold
-2. **Object References**: Variables are references to objects in memory, not the objects themselves
-3. **Memory Management**: Python automatically manages memory allocation and deallocation
-4. **Scope Rules**: Variables have different scopes (local, global, built-in) that determine where they can be accessed
-5. **Mutability**: Some variable types can be changed after creation (mutable), while others cannot (immutable)
+In Python, variables work differently than in many other languages:
+- **Dynamic Typing**: Variable types are determined at runtime
+- **Object References**: Variables are references to objects in memory
+- **Mutable vs Immutable**: Some data types can be changed after creation
+- **Memory Management**: Python handles memory allocation automatically
+- **Garbage Collection**: Unused variables are automatically cleaned up
+
+### Variable Assignment
+
+When you assign a value to a variable:
+1. Python creates an object in memory with the value
+2. The variable name becomes a reference to that memory location
+3. The assignment operator `=` links the name to the object
+
+### Memory Model
+
+```python
+x = 10        # Creates integer object, x points to it
+y = x         # y now points to the same object as x
+x = 20        # Creates new integer object, x now points to it
+```
 
 ## Syntax
 
+### Basic Variable Declaration
 ```python
-# Basic variable assignment
 variable_name = value
+```
 
-# Multiple assignment
-var1 = var2 = var3 = value
+### Multiple Assignment
+```python
+# Single value to multiple variables
+a = b = c = 10
 
-# Multiple variables in one line
-var1, var2, var3 = value1, value2, value3
+# Multiple values to multiple variables
+x, y, z = 1, 2, 3
+```
 
-# Type annotation (optional)
-variable_name: data_type = value
+### Variable Naming Rules
+- Must start with a letter or underscore
+- Can contain letters, numbers, and underscores
+- Case-sensitive (`age` ≠ `Age`)
+- Cannot be Python keywords
+
+### Valid Variable Names
+```python
+name = "John"
+_age = 25
+student1 = True
+total_amount = 100.50
+MAX_SIZE = 1000  # Convention for constants
 ```
 
 ## Flow / Working
 
-1. **Declaration**: Python automatically declares variables when you assign a value
-2. **Memory Allocation**: Python allocates memory for the object based on its type
-3. **Assignment**: The variable name becomes a reference to the memory location
-4. **Usage**: The variable can be used anywhere in its scope
-5. **Reassignment**: Variables can be reassigned to different values/types
-6. **Garbage Collection**: When variables go out of scope, Python automatically frees the memory
+1. **Declaration**: Variable name is created in namespace
+2. **Assignment**: Value is assigned to the variable
+3. **Memory Allocation**: Python creates object and assigns reference
+4. **Usage**: Variable can be accessed throughout its scope
+5. **Reassignment**: New value can replace old value
+6. **Garbage Collection**: When out of scope, memory is freed
 
 ## Example 1 (Beginner)
 
 ```python
-# Simple variable assignment
+# Basic variable operations
 name = "Alice"
 age = 25
+height = 5.6
 is_student = True
 
-# Printing variables
 print("Name:", name)
 print("Age:", age)
+print("Height:", height)
 print("Is Student:", is_student)
 
-# Basic arithmetic with variables
-x = 10
-y = 5
-sum_result = x + y
-print("Sum:", sum_result)
+# Variable reassignment
+age = 26
+print("Updated Age:", age)
 
-# String concatenation with variables
-greeting = "Hello, " + name + "!"
-print(greeting)
+# Basic calculations with variables
+num1 = 10
+num2 = 5
+sum_result = num1 + num2
+product = num1 * num2
+
+print(f"Sum of {num1} and {num2} is {sum_result}")
+print(f"Product is {product}")
 ```
 
 ## Example 2 (Intermediate)
 
 ```python
-# Multiple assignment
-a = b = c = 10
-print(f"a: {a}, b: {b}, c: {c}")
-
-# Unpacking sequences
-coordinates = (3, 4, 5)
-x, y, z = coordinates
-print(f"X: {x}, Y: {y}, Z: {z}")
-
-# Swapping variables (Pythonic way)
-first = 100
-second = 200
-print(f"Before swap - first: {first}, second: {second}")
-first, second = second, first
-print(f"After swap - first: {first}, second: {second}")
-
-# Type checking and conversion
-user_input = "42"
-print(f"Original type: {type(user_input)}")
-number = int(user_input)
-print(f"Converted type: {type(number)}")
-
-# Working with different scopes
-global_var = "I'm global"
-
-def my_function():
+# Variable scope and advanced operations
+def demonstrate_scope():
+    # Local variable
     local_var = "I'm local"
     print(local_var)
-    print(global_var)  # Can access global variables
+    
+    # Global variable access
+    global global_counter
+    global_counter += 1
+    print(f"Global counter: {global_counter}")
 
-my_function()
-# print(local_var)  # This would cause an error
+# Global variable
+global_counter = 0
+message = "Hello, World!"
+
+# Multiple assignment
+a, b, c = 1, 2, 3
+x = y = z = 100
+
+# Variable unpacking
+coordinates = (10, 20, 30)
+x_coord, y_coord, z_coord = coordinates
+
+# Type checking
+print(f"Type of message: {type(message)}")
+print(f"Type of a: {type(a)}")
+
+# String formatting with variables
+user_info = f"User: {name}, Age: {age}, Height: {height}"
+print(user_info)
+
+# Calling function to show scope
+demonstrate_scope()
 ```
 
 ## Example 3 (Advanced)
 
 ```python
-# Dynamic typing demonstration
-variable = 42
-print(f"Variable is {type(variable)} with value {variable}")
+# Advanced variable concepts
+from typing import List, Dict, Optional
 
-variable = "Now I'm a string"
-print(f"Variable is {type(variable)} with value {variable}")
+# Type hints (Python 3.5+)
+def process_data(numbers: List[int], multiplier: int = 2) -> Dict[str, int]:
+    """Process a list of numbers with type hints"""
+    result = {
+        'original_sum': sum(numbers),
+        'multiplied_sum': sum(num * multiplier for num in numbers),
+        'count': len(numbers)
+    }
+    return result
 
-variable = [1, 2, 3, 4, 5]
-print(f"Variable is {type(variable)} with value {variable}")
+# Variable annotations (Python 3.6+)
+name: str = "Advanced Python"
+items: List[int] = [1, 2, 3, 4, 5]
+metadata: Dict[str, str] = {"version": "1.0", "author": "Python"}
+
+# Walrus operator (Python 3.8+) - assignment expression
+if (n := len(items)) > 3:
+    print(f"List has {n} items, which is more than 3")
 
 # Variable unpacking with *
-numbers = [1, 2, 3, 4, 5]
-first, *middle, last = numbers
+first, *middle, last = [1, 2, 3, 4, 5]
 print(f"First: {first}, Middle: {middle}, Last: {last}")
 
+# Dictionary unpacking
+person = {"name": "Bob", "age": 30}
+greeting = "Hello {name}, you are {age} years old".format(**person)
+print(greeting)
+
+# Advanced multiple assignment
+a, b = b, a  # Swap variables without temp variable
+print(f"Swapped: a={a}, b={b}")
+
 # Using variables in list comprehensions
-multiplier = 2
-result = [x * multiplier for x in range(1, 6)]
-print(f"Result: {result}")
+squared_values = [x**2 for x in range(10) if x % 2 == 0]
+print(f"Squared even numbers: {squared_values}")
 
-# Advanced unpacking with dictionaries
-person = {"name": "Bob", "age": 30, "city": "New York"}
-def display_person(name, age, city):
-    print(f"{name} is {age} years old and lives in {city}")
-
-display_person(**person)  # Unpacking dictionary
-
-# Using globals() and locals()
-def show_variables():
-    local_var = "Local"
-    print("Local variables:", locals())
-    print("Global variables:", list(globals().keys()))
-
-show_variables()
+# Processing with type hints
+data_result = process_data([1, 2, 3, 4, 5], 3)
+print(f"Processed data: {data_result}")
 ```
 
 ## Output
@@ -183,234 +239,201 @@ show_variables()
 ```
 Name: Alice
 Age: 25
+Height: 5.6
 Is Student: True
-Sum: 15
-Hello, Alice!
-
-a: 10, b: 10, c: 10
-X: 3, Y: 4, Z: 5
-Before swap - first: 100, second: 200
-After swap - first: 200, second: 100
-Original type: <class 'str'>
-Converted type: <class 'int'>
-
+Updated Age: 26
+Sum of 10 and 5 is 15
+Product is 50
 I'm local
-I'm global
-
-Variable is <class 'int'> with value 42
-Variable is <class 'str'> with value Now I'm a string
-Variable is <class 'list'> with value [1, 2, 3, 4, 5]
+Global counter: 1
+Type of message: <class 'str'>
+Type of a: <class 'int'>
+User: Alice, Age: 26, Height: 5.6
 First: 1, Middle: [2, 3, 4], Last: 5
-Result: [2, 4, 6, 8, 10]
-Bob is 30 years old and lives in New York
-Local variables: {'local_var': 'Local'}
-Global variables: ['__name__', '__doc__', '__package__', '__loader__', '__spec__', '__annotations__', '__builtins__', '__file__', '__cached__', 'name', 'age', 'is_student', 'x', 'y', 'sum_result', 'greeting', 'a', 'b', 'c', 'coordinates', 'first', 'second', 'user_input', 'number', 'global_var', 'my_function', 'variable', 'numbers', 'multiplier', 'result', 'person', 'display_person', 'show_variables', 'local_var']
+Hello Bob, you are 30 years old
+Swapped: a=100, b=100
+Squared even numbers: [0, 4, 16, 36, 64]
+Processed data: {'original_sum': 15, 'multiplied_sum': 45, 'count': 5}
 ```
 
 ## Common Mistakes
 
-| Mistake | Explanation | Solution |
-|---------|-------------|----------|
-| Using undefined variables | Trying to use a variable before assigning it | Always initialize variables before use |
-| Incorrect naming | Using reserved keywords or invalid names | Follow Python naming conventions |
-| Scope confusion | Accessing local variables outside their scope | Understand variable scope rules |
-| Type errors | Performing operations on incompatible types | Check and convert types appropriately |
-| Mutable default arguments | Using mutable objects as default parameters | Use None and create new objects inside functions |
-| Unpacking mismatch | Number of variables doesn't match values | Ensure correct number of variables and values |
+| Mistake | Example | Correct Approach |
+|---------|---------|------------------|
+| Using undefined variables | `print(x)` (without defining x) | `x = 10; print(x)` |
+| Invalid variable names | `1variable = 5` | `variable1 = 5` |
+| Confusing = and == | `if x = 5:` | `if x == 5:` |
+| Variable name typos | `usernmae = "John"` | `username = "John"` |
+| Reusing variable names | `list = [1,2,3]` (shadows built-in) | `my_list = [1,2,3]` |
+| Scope issues | Using local var outside function | Return or make global |
+| Mutable default arguments | `def func(lst=[]):` | `def func(lst=None):` |
+| Unpacking mismatch | `a, b = [1,2,3]` | `a, b, c = [1,2,3]` |
 
 ## Best Practices
 
-1. **Use descriptive names**: Choose meaningful variable names that explain their purpose
-2. **Follow naming conventions**: Use snake_case for variable names (e.g., `user_name`)
-3. **Initialize variables**: Always assign initial values to avoid undefined behavior
-4. **Limit scope**: Keep variables in the smallest scope necessary
-5. **Use constants for fixed values**: Define constants in uppercase (e.g., `MAX_SIZE = 100`)
-6. **Avoid global variables**: Minimize use of global variables to reduce complexity
-7. **Use type hints**: Add type annotations for better code documentation
-8. **Consistent naming**: Maintain consistency in naming across your codebase
+1. **Use descriptive names**: `total_price` instead of `tp`
+2. **Follow naming conventions**: 
+   - `snake_case` for variables
+   - `UPPER_CASE` for constants
+3. **Initialize variables before use**
+4. **Avoid single letter names** except for loop counters
+5. **Use type hints** for better code documentation
+6. **Keep variable scope minimal**
+7. **Use meaningful prefixes** for related variables
+8. **Avoid shadowing built-in names**
+9. **Use constants for magic numbers**
+10. **Group related variables logically**
 
 ## Pro Tips
 
-1. **Use f-strings for variable interpolation**: `f"Hello {name}"` is more readable than `"Hello " + name`
-2. **Leverage tuple unpacking**: `a, b = b, a` for swapping variables
-3. **Use walrus operator (Python 3.8+)**: `if (n := len(data)) > 10:` assigns and checks in one line
-4. **Understand variable references**: Lists and dictionaries are mutable, so changes affect all references
-5. **Use `id()` to check object identity**: `id(variable)` shows the memory address
-6. **Use `is` for identity comparison**: `a is b` checks if two variables reference the same object
-7. **Use `copy()` for shallow copying**: `new_list = old_list.copy()` creates a new list
-8. **Leverage multiple assignment**: `x, y, z = 1, 2, 3` for cleaner initialization
+1. **Use f-strings for variable interpolation**:
+   ```python
+   name, age = "Alice", 25
+   print(f"Hello {name}, you are {age} years old")
+   ```
+
+2. **Variable unpacking for multiple returns**:
+   ```python
+   def get_name_age():
+       return "Bob", 30
+   name, age = get_name_age()
+   ```
+
+3. **Use walrus operator for cleaner code**:
+   ```python
+   # Instead of:
+   data = input("Enter data: ")
+   if len(data) > 10:
+       print(f"Long input: {data}")
+   
+   # Use:
+   if (data := input("Enter data: ")) and len(data) > 10:
+       print(f"Long input: {data}")
+   ```
+
+4. **Leverage multiple assignment for swapping**:
+   ```python
+   a, b = b, a  # No temp variable needed
+   ```
+
+5. **Use variable unpacking with * for flexible assignments**:
+   ```python
+   first, *rest, last = [1, 2, 3, 4, 5]
+   ```
+
+6. **Utilize variable annotations for better IDE support**:
+   ```python
+   from typing import List
+   numbers: List[int] = [1, 2, 3, 4, 5]
+   ```
 
 ## Interview Questions (10)
 
-1. **What is the difference between a variable and a constant in Python?**
-2. **Explain Python's dynamic typing with an example.**
-3. **What is variable scope and what are the different types of scope in Python?**
+1. **What is the difference between variables in Python and other languages?**
+2. **Explain Python's variable assignment mechanism.**
+3. **What is variable scope in Python?**
 4. **How does Python handle memory management for variables?**
-5. **What is the difference between `==` and `is` operators?**
-6. **Explain variable unpacking with examples.**
-7. **What happens when you assign one variable to another in Python?**
-8. **How do you handle mutable default arguments in functions?**
-9. **What is the purpose of the `global` and `nonlocal` keywords?**
-10. **Explain the concept of variable references and object identity.**
+5. **What are the differences between mutable and immutable variables?**
+6. **Explain the concept of variable unpacking in Python.**
+7. **What are type hints and how do they improve code quality?**
+8. **How does Python's garbage collection work with variables?**
+9. **What is the difference between `=` and `==` in variable context?**
+10. **Explain the walrus operator and its use cases.**
 
 ## MCQs (10)
 
-1. **What is the output of the following code?**
-```python
-x = 10
-y = x
-x = 20
-print(y)
-```
-a) 10
-b) 20
-c) Error
-d) None
+1. **What does the following code output?**
+   ```python
+   x = [1, 2, 3]
+   y = x
+   y.append(4)
+   print(x)
+   ```
+   a) [1, 2, 3]  
+   b) [1, 2, 3, 4]  
+   c) [4]  
+   d) Error
 
-2. **Which of the following is a valid variable name in Python?**
-a) 2variable
-b) variable-name
-c) variable_name
-d) variable name
+2. **Which is a valid variable name in Python?**
+   a) 2variable  
+   b) variable-name  
+   c) _variable  
+   d) class
 
-3. **What does the `id()` function return?**
-a) Variable value
-b) Variable name
-c) Memory address
-d) Variable type
+3. **What is the output of: `a, b = 5, 10; a, b = b, a; print(a, b)`**
+   a) 5 10  
+   b) 10 5  
+   c) Error  
+   d) 5 5
 
-4. **Which operator is used for identity comparison?**
-a) ==
-b) =
-c) is
-d) !=
+4. **In Python, variables are:**
+   a) Statically typed  
+   b) Dynamically typed  
+   c) Strongly typed only  
+   d) Weakly typed only
 
-5. **What is the scope of a variable defined inside a function?**
-a) Global
-b) Local
-c) Built-in
-d) Module
+5. **What does `global` keyword do?**
+   a) Makes variable local  
+   b) Makes variable accessible globally  
+   c) Deletes variable  
+   d) None of the above
 
-6. **What is the output of this code?**
-```python
-a, b = 5, 10
-a, b = b, a
-print(a, b)
-```
-a) 5 10
-b) 10 5
-c) Error
-d) 5 5
+6. **The walrus operator `:=` was introduced in:**
+   a) Python 3.5  
+   b) Python 3.7  
+   c) Python 3.8  
+   d) Python 3.9
 
-7. **Which keyword is used to modify a global variable inside a function?**
-a) local
-b) global
-c) nonlocal
-d) external
+7. **What is the result of: `x = y = 10; y = 20; print(x)`**
+   a) 10  
+   b) 20  
+   c) Error  
+   d) None
 
-8. **What happens when you delete a variable using `del`?**
-a) Variable value becomes None
-b) Variable name is removed from namespace
-c) Memory is immediately freed
-d) All of the above
+8. **Which data type is mutable?**
+   a) int  
+   b) str  
+   c) list  
+   d) tuple
 
-9. **Which of the following creates a tuple?**
-a) x = (5)
-b) x = 5,
-c) x = (5,)
-d) Both b and c
+9. **What does `*` do in unpacking?**
+   a) Multiplies values  
+   b) Collects remaining values  
+   c) Deletes values  
+   d) None of the above
 
-10. **What is the result of `type(42)`?**
-a) int
-b) <class 'int'>
-c) 42
-d) "int"
+10. **Type hints are:**
+    a) Enforced at runtime  
+    b) Checked at compile time  
+    c) For documentation and IDE support  
+    d) Mandatory in Python
 
 ## Practice Questions (10)
 
-1. Create variables to store your name, age, and whether you're a student. Print them in a formatted string.
-2. Write a program that swaps the values of two variables without using a temporary variable.
-3. Create a list of numbers and use unpacking to assign the first element to one variable and the rest to another.
-4. Write a function that takes a dictionary and unpacks it as keyword arguments to another function.
-5. Create a program that demonstrates the difference between local and global variables.
-6. Write code that shows how mutable objects behave when assigned to multiple variables.
-7. Create a program that uses the walrus operator to simplify a while loop.
-8. Write a function that accepts variable arguments using *args and **kwargs.
-9. Create a program that shows the difference between shallow and deep copying.
-10. Write code that demonstrates variable scope with nested functions.
+1. Create variables for a student's name, age, and grades, then display them.
+2. Write a program that swaps two variables without using a temporary variable.
+3. Create a function that returns multiple values and unpack them into variables.
+4. Demonstrate variable scope with global and local variables.
+5. Use variable unpacking to separate first, middle, and last elements of a list.
+6. Implement a program using type hints for better code documentation.
+7. Use the walrus operator to simplify input validation code.
+8. Create constants for mathematical values (π, e) and use them in calculations.
+9. Write a program that shows the difference between mutable and immutable variables.
+10. Implement a function that uses variable-length argument unpacking.
 
 ## Coding Exercises (5)
 
-### Exercise 1: Temperature Converter
-Create a program that converts temperatures between Celsius, Fahrenheit, and Kelvin using variables to store the values.
+1. **Temperature Converter**: Create variables for Celsius and Fahrenheit temperatures, write conversion functions, and store results in variables.
 
-### Exercise 2: Student Grade Calculator
-Write a program that calculates a student's average grade from multiple subjects using variables to store grades and results.
+2. **Bank Account**: Design variables to store account holder information, balance, and transaction history. Implement deposit and withdrawal functions.
 
-### Exercise 3: Bank Account Simulation
-Create a simple bank account system where you can deposit, withdraw, and check balance using variables to track the account state.
+3. **Student Grade Calculator**: Use variables to store student scores, calculate averages, and determine letter grades using appropriate variable naming.
 
-### Exercise 4: Word Counter
-Write a program that counts the frequency of words in a text using variables to store the text and word counts.
+4. **Shopping Cart**: Create variables for items, prices, quantities, and totals. Implement functions to add items and calculate final amounts.
 
-### Exercise 5: Shopping Cart
-Create a shopping cart system that calculates total cost, applies discounts, and tracks inventory using variables.
+5. **Data Analysis Tool**: Use variables with type hints to store dataset information, implement statistical calculations, and return results in structured variables.
 
 ## Mini Project
 
-### Personal Finance Tracker
+**Personal Finance Tracker**
 
-Create a comprehensive personal finance tracker that uses variables to manage income, expenses, and savings.
-
-```python
-class FinanceTracker:
-    def __init__(self):
-        self.income = 0.0
-        self.expenses = 0.0
-        self.savings = 0.0
-        self.transactions = []
-    
-    def add_income(self, amount, source):
-        self.income += amount
-        self.transactions.append(f"Income: +${amount} from {source}")
-        self.update_savings()
-    
-    def add_expense(self, amount, category):
-        self.expenses += amount
-        self.transactions.append(f"Expense: -${amount} for {category}")
-        self.update_savings()
-    
-    def update_savings(self):
-        self.savings = self.income - self.expenses
-    
-    def get_summary(self):
-        return {
-            "total_income": self.income,
-            "total_expenses": self.expenses,
-            "current_savings": self.savings,
-            "transaction_count": len(self.transactions)
-        }
-    
-    def display_report(self):
-        summary = self.get_summary()
-        print("=== FINANCE REPORT ===")
-        print(f"Total Income: ${summary['total_income']:.2f}")
-        print(f"Total Expenses: ${summary['total_expenses']:.2f}")
-        print(f"Current Savings: ${summary['current_savings']:.2f}")
-        print(f"Number of Transactions: {summary['transaction_count']}")
-
-# Usage example
-tracker = FinanceTracker()
-tracker.add_income(3000, "Salary")
-tracker.add_expense(800, "Rent")
-tracker.add_expense(200, "Groceries")
-tracker.display_report()
-```
-
-## Assignment
-
-Create a complete inventory management system for a small retail store. Your system should:
-
-1. Use variables to store product information (name, price, quantity)
-2. Implement functions to add, remove, and update products
-3. Track total inventory

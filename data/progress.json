@@ -1,11 +1,10 @@
 {
     "subject": "Python",
     "day": 10,
-    "current_topic": "Data Types",
+    "current_topic": "Variables",
     "completed": [
         "Match Case",
-        "Variables",
-        "Data Types"
+        "Variables"
     ],
     "completed_subjects": []
 }
