@@ -9,9 +9,9 @@ Automatically generated programming lessons using AI.
 | Item | Value |
 |------|-------|
 | 📚 Subject | Python |
-| 📅 Current Day | 7 |
-| 📝 Latest Topic | Conditional Statements |
-| ✅ Lessons Completed | 6 |
+| 📅 Current Day | 8 |
+| 📝 Latest Topic | Nested If |
+| ✅ Lessons Completed | 7 |
 
 ---
 

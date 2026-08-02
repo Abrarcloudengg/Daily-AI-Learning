@@ -1,13 +1,14 @@
 {
     "subject": "Python",
-    "day": 7,
-    "current_topic": "Conditional Statements",
+    "day": 8,
+    "current_topic": "Nested If",
     "completed": [
         "Variables",
         "Data Types",
         "Input and Output",
         "Type Casting",
         "Operators",
-        "Conditional Statements"
+        "Conditional Statements",
+        "Nested If"
     ]
 }
