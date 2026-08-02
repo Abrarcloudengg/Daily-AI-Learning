@@ -9,9 +9,9 @@ Automatically generated programming lessons using AI.
 | Item | Value |
 |------|-------|
 | 📚 Subject | Python |
-| 📅 Current Day | 10 |
-| 📝 Latest Topic | Variables |
-| ✅ Lessons Completed | 2 |
+| 📅 Current Day | 11 |
+| 📝 Latest Topic | Data Types |
+| ✅ Lessons Completed | 3 |
 
 ---
 
