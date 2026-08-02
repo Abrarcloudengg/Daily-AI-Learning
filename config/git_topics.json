@@ -1,0 +1,25 @@
+{
+  "subject": "Git",
+  "topics": [
+    "Introduction to Git",
+    "Git Installation",
+    "git init",
+    "git status",
+    "git add",
+    "git commit",
+    "git log",
+    "git branch",
+    "git checkout",
+    "git merge",
+    "git rebase",
+    "git stash",
+    "git reset",
+    "git revert",
+    "GitHub",
+    "Pull Requests",
+    "Merge Conflicts",
+    "Git Tags",
+    "GitHub Actions",
+    "Project Building"
+  ]
+}

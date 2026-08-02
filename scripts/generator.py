@@ -10,10 +10,18 @@ load_dotenv()
 
 API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-# Get next topic automatically
-topic = get_next_topic()
+if not API_KEY:
+    print("❌ OPENROUTER_API_KEY not found.")
+    exit()
 
-# Read current day
+# Get next topic automatically
+subject, topic = get_next_topic()
+
+if topic is None:
+    print("✅ All topics completed.")
+    exit()
+
+# Read current progress
 with open("data/progress.json", "r", encoding="utf-8") as f:
     progress = json.load(f)
 
@@ -36,7 +44,7 @@ data = {
         {
             "role": "user",
             "content": f"""
-Create Day {day} of Python Learning.
+Create Day {day} of {subject} Learning.
 
 Topic: {topic}
 
@@ -81,34 +89,24 @@ if response.status_code != 200:
 
 lesson = response.json()["choices"][0]["message"]["content"]
 
-# Create folder if not exists
-os.makedirs("generated/Python", exist_ok=True)
+# Create subject folder
+os.makedirs(f"generated/{subject}", exist_ok=True)
 
 # Safe filename
-safe_topic = topic.replace(" ", "_")
+safe_topic = topic.replace(" ", "_").replace("/", "_")
 
-output_file = f"generated/Python/Day{day:03d}_{safe_topic}.md"
+output_file = (
+    f"generated/{subject}/"
+    f"Day{day:03d}_{safe_topic}.md"
+)
 
 with open(output_file, "w", encoding="utf-8") as f:
     f.write(lesson)
 
-# Update progress
-# Update progress
+print("✅ Lesson generated successfully!")
+print(f"📚 Subject : {subject}")
+print(f"📚 Topic   : {topic}")
+print(f"📁 Saved   : {output_file}")
 
-completed = progress["completed"]
-day = progress["day"]
-
-completed.append(topic)
-day += 1
-
-progress["completed"] = completed
-progress["day"] = day
-progress["current_topic"] = topic
-
-with open("data/progress.json", "w", encoding="utf-8") as f:
-    json.dump(progress, f, indent=4)
-print(f"✅ Lesson generated successfully!")
-print(f"📚 Topic : {topic}")
-print(f"📁 Saved : {output_file}")
-
-git_commit_and_push(day - 1, topic)
+# Commit & Push
+git_commit_and_push(day, topic)

@@ -1,0 +1,25 @@
+{
+  "subject": "SQL",
+  "topics": [
+    "Introduction to SQL",
+    "Database Basics",
+    "CREATE DATABASE",
+    "CREATE TABLE",
+    "INSERT",
+    "SELECT",
+    "WHERE",
+    "ORDER BY",
+    "GROUP BY",
+    "HAVING",
+    "JOINS",
+    "Subqueries",
+    "Views",
+    "Indexes",
+    "Transactions",
+    "Stored Procedures",
+    "Triggers",
+    "Normalization",
+    "Query Optimization",
+    "Project Building"
+  ]
+}
