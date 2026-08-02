@@ -1,9 +1,10 @@
 {
     "subject": "Python",
-    "day": 3,
-    "current_topic": "Data Types",
+    "day": 4,
+    "current_topic": "Input and Output",
     "completed": [
         "Variables",
-        "Data Types"
+        "Data Types",
+        "Input and Output"
     ]
 }
