@@ -39,40 +39,90 @@ data = {
     "messages": [
         {
             "role": "system",
-            "content": "You are an expert programming teacher. Create high-quality Markdown lessons."
+            "content": (
+                "You are a senior programming instructor and technical writer. "
+                "Generate professional, detailed, beginner-to-advanced programming lessons in Markdown."
+            )
         },
         {
             "role": "user",
             "content": f"""
-Create Day {day} of {subject} Learning.
+Create a complete professional Markdown lesson.
 
+Subject: {subject}
+Day: {day}
 Topic: {topic}
 
-Include:
+The lesson must be Beginner → Intermediate → Advanced.
 
-# Title
+Use EXACTLY this structure.
 
-## Explanation
+# {topic}
+
+## Learning Objectives
+
+## Prerequisites
+
+## What is {topic}?
+
+## Why is it Important?
+
+## Real World Analogy
+
+## Theory
 
 ## Syntax
 
-## Example Code
+## Flow / Working
+
+## Example 1 (Beginner)
+
+## Example 2 (Intermediate)
+
+## Example 3 (Advanced)
 
 ## Output
 
 ## Common Mistakes
 
-## Interview Questions
+## Best Practices
 
-## Practice Questions
+## Pro Tips
+
+## Interview Questions (10)
+
+## MCQs (10)
+
+## Practice Questions (10)
+
+## Coding Exercises (5)
+
+## Mini Project
 
 ## Assignment
 
-Return ONLY Markdown.
+## Summary
+
+## Key Takeaways
+
+## Next Topic Preview
+
+Rules:
+
+- Return ONLY Markdown.
+- Use proper Markdown headings.
+- Explain every concept clearly.
+- Every code example must run correctly.
+- Use Python markdown code blocks.
+- Use tables wherever useful.
+- Make the lesson interview-ready.
+- Do NOT skip any section.
+- Do NOT use placeholder text.
+- Keep explanations detailed and professional.
 """
         }
     ],
-    "max_tokens": 1800,
+    "max_tokens": 3500,
     "temperature": 0.7
 }
 
