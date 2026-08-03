@@ -1,7 +1,7 @@
 {
     "subject": "Python",
-    "day": 9,
-    "current_topic": "Match Case",
+    "day": 10,
+    "current_topic": "While Loop",
     "completed": [
         "Variables",
         "Data Types",
@@ -10,7 +10,8 @@
         "Operators",
         "Conditional Statements",
         "Nested If",
-        "Match Case"
+        "Match Case",
+        "While Loop"
     ],
     "completed_subjects": []
 }

@@ -322,7 +322,7 @@ python -m venv venv
 source venv/bin/activate          # Windows: venv\Scripts\activate
 
 # 3. Install
-pip install -e .                  # add "[dev]" for the test and lint tools
+pip install -e .[dev]              # add dev tools for testing, linting, and type checking
 
 # 4. Add your API key
 cp .env.example .env              # Windows: copy .env.example .env
