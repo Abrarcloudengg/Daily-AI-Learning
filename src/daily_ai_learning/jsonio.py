@@ -54,7 +54,9 @@ def write_json(path: Path, payload: Any, *, indent: int = 4) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(payload, indent=indent, ensure_ascii=False) + "\n"
 
-    handle = tempfile.NamedTemporaryFile(
+    temp_path = path.parent / f".{path.name}.{os.getpid()}.tmp"
+
+    with tempfile.NamedTemporaryFile(
         mode="w",
         encoding="utf-8",
         newline="\n",
@@ -62,13 +64,13 @@ def write_json(path: Path, payload: Any, *, indent: int = 4) -> None:
         prefix=f".{path.name}.",
         suffix=".tmp",
         delete=False,
-    )
-    temp_path = Path(handle.name)
+    ) as handle:
+        handle.write(text)
+        handle.flush()
+        os.fsync(handle.fileno())
+        temp_path = Path(handle.name)
+
     try:
-        with handle:
-            handle.write(text)
-            handle.flush()
-            os.fsync(handle.fileno())
         os.replace(temp_path, path)
     except BaseException:
         temp_path.unlink(missing_ok=True)

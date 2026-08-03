@@ -1,147 +1,47 @@
-"""README rendering.
+Metadata-Version: 2.4
+Name: daily-ai-learning
+Version: 2.0.0
+Summary: A self-driving curriculum generator that writes one AI lesson per day.
+Author: Abrar Patel
+License: MIT
+Project-URL: Homepage, https://github.com/Abrarcloudengg/Daily-AI-Learning
+Project-URL: Repository, https://github.com/Abrarcloudengg/Daily-AI-Learning
+Project-URL: Bug Tracker, https://github.com/Abrarcloudengg/Daily-AI-Learning/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 4 - Beta
+Classifier: Topic :: Education
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests==2.31.0
+Requires-Dist: python-dotenv==1.1.1
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: ruff>=0.0.283; extra == "dev"
+Requires-Dist: mypy>=1.0; extra == "dev"
+Dynamic: license-file
 
-The README is generated, not hand-edited: it doubles as the project's live
-dashboard, so every number in it is derived from the catalogue and from the
-lessons on disk. Static prose lives in this module next to the dynamic parts so
-there is exactly one place to change when the project changes.
-"""
+<div align="center">
 
-from __future__ import annotations
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,50:1F6FEB,100:58A6FF&height=190&section=header&text=Daily%20AI%20Learning&fontSize=54&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Your%20curriculum,%20generated%20while%20you%20sleep&descAlignY=58&descSize=16" alt="Daily AI Learning" width="100%" />
 
-import re
-from dataclasses import dataclass
-
-from .catalog import TopicCatalog
-from .lessons import LessonLibrary
-from .logging_setup import get_logger
-from .paths import Paths
-from .progress import Progress, ProgressStore
-from .settings import Settings
-
-__all__ = ["ReadmeRenderer", "RepoInfo"]
-
-logger = get_logger(__name__)
-
-_PROGRESS_BAR_WIDTH = 24
-_GITHUB_URL = re.compile(r"github\.com/(?P<owner>[^/]+)/(?P<repo>[^/#?]+)")
-
-
-@dataclass(frozen=True)
-class RepoInfo:
-    """GitHub coordinates used to build badge and link URLs."""
-
-    owner: str = "Abrarcloudengg"
-    name: str = "Daily-AI-Learning"
-
-    @classmethod
-    def from_settings(cls, settings: Settings) -> RepoInfo:
-        """Derive owner/name from the configured referer URL, with fallbacks."""
-        match = _GITHUB_URL.search(settings.referer)
-        if match is None:
-            return cls()
-        return cls(owner=match.group("owner"), name=match.group("repo").removesuffix(".git"))
-
-    @property
-    def url(self) -> str:
-        return f"https://github.com/{self.owner}/{self.name}"
-
-    @property
-    def slug(self) -> str:
-        return f"{self.owner}/{self.name}"
-
-    @property
-    def pages_url(self) -> str:
-        return f"https://{self.owner.lower()}.github.io/{self.name}/"
-
-
-class ReadmeRenderer:
-    """Builds ``README.md`` from live project state."""
-
-    def __init__(
-        self,
-        paths: Paths | None = None,
-        catalog: TopicCatalog | None = None,
-        store: ProgressStore | None = None,
-        settings: Settings | None = None,
-        library: LessonLibrary | None = None,
-    ) -> None:
-        self.paths = paths or Paths.discover()
-        self.catalog = catalog or TopicCatalog(self.paths)
-        self.library = library or LessonLibrary(self.paths)
-        self.store = store or ProgressStore(self.paths, self.catalog, self.library)
-        self.settings = settings or Settings()
-        self.repo = RepoInfo.from_settings(self.settings)
-
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
-    def write(self, progress: Progress) -> str:
-        """Render the README and write it to disk. Returns the content."""
-        content = self.render(progress)
-        self.paths.readme_file.write_text(content, encoding="utf-8", newline="\n")
-        logger.info("Updated %s.", self.paths.relative(self.paths.readme_file))
-        return content
-
-    def render(self, progress: Progress) -> str:
-        """Return the full README as a Markdown string."""
-        sections = (
-            self._header(),
-            self._about(),
-            self._dashboard(progress),
-            self._roadmap(progress),
-            self._features(),
-            self._architecture(),
-            self._workflow_diagram(),
-            self._structure(),
-            self._quickstart(),
-            self._configuration(),
-            self._usage(),
-            self._example_output(),
-            self._screenshots(),
-            self._automation(),
-            self._testing(),
-            self._future_plans(),
-            self._faq(),
-            self._contributing(),
-            self._license(),
-            self._credits(),
-        )
-        return "\n\n---\n\n".join(section.strip() for section in sections) + "\n"
-
-    # ------------------------------------------------------------------
-    # Sections
-    # ------------------------------------------------------------------
-    def _header(self) -> str:
-        typing_svg = (
-            "https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26"
-            "&duration=3200&pause=800&color=58A6FF&center=true&vCenter=true&width=620"
-            "&lines=Daily+AI+Learning;One+AI-generated+lesson+every+day;"
-            "719+topics.+15+subjects.+Zero+manual+work."
-        )
-        banner = (
-            "https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,50:1F6FEB,100:58A6FF"
-            "&height=190&section=header&text=Daily%20AI%20Learning&fontSize=54&fontColor=ffffff"
-            "&animation=fadeIn&fontAlignY=36&desc=Your%20curriculum,%20generated%20while%20you%20sleep"
-            "&descAlignY=58&descSize=16"
-        )
-
-        return f"""<div align="center">
-
-<img src="{banner}" alt="Daily AI Learning" width="100%" />
-
-<a href="{self.repo.url}">
-  <img src="{typing_svg}" alt="Daily AI Learning" />
+<a href="https://github.com/Abrarcloudengg/Daily-AI-Learning">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&duration=3200&pause=800&color=58A6FF&center=true&vCenter=true&width=620&lines=Daily+AI+Learning;One+AI-generated+lesson+every+day;719+topics.+15+subjects.+Zero+manual+work." alt="Daily AI Learning" />
 </a>
 
 <p>
-  <a href="{self.repo.url}/actions/workflows/daily.yml">
-    <img alt="Daily lesson" src="https://img.shields.io/github/actions/workflow/status/{self.repo.slug}/daily.yml?branch=main&label=daily%20lesson&logo=githubactions&logoColor=white&style=for-the-badge" />
+  <a href="https://github.com/Abrarcloudengg/Daily-AI-Learning/actions/workflows/daily.yml">
+    <img alt="Daily lesson" src="https://img.shields.io/github/actions/workflow/status/Abrarcloudengg/Daily-AI-Learning/daily.yml?branch=main&label=daily%20lesson&logo=githubactions&logoColor=white&style=for-the-badge" />
   </a>
-  <a href="{self.repo.url}/actions/workflows/ci.yml">
-    <img alt="CI" src="https://img.shields.io/github/actions/workflow/status/{self.repo.slug}/ci.yml?branch=main&label=ci&logo=github&logoColor=white&style=for-the-badge" />
+  <a href="https://github.com/Abrarcloudengg/Daily-AI-Learning/actions/workflows/ci.yml">
+    <img alt="CI" src="https://img.shields.io/github/actions/workflow/status/Abrarcloudengg/Daily-AI-Learning/ci.yml?branch=main&label=ci&logo=github&logoColor=white&style=for-the-badge" />
   </a>
-  <a href="{self.repo.url}/blob/main/LICENSE">
-    <img alt="License" src="https://img.shields.io/github/license/{self.repo.slug}?style=for-the-badge&color=blue" />
+  <a href="https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/Abrarcloudengg/Daily-AI-Learning?style=for-the-badge&color=blue" />
   </a>
   <a href="https://www.python.org/downloads/">
     <img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" />
@@ -149,14 +49,14 @@ class ReadmeRenderer:
 </p>
 
 <p>
-  <a href="{self.repo.url}/stargazers">
-    <img alt="Stars" src="https://img.shields.io/github/stars/{self.repo.slug}?style=flat-square&color=yellow" />
+  <a href="https://github.com/Abrarcloudengg/Daily-AI-Learning/stargazers">
+    <img alt="Stars" src="https://img.shields.io/github/stars/Abrarcloudengg/Daily-AI-Learning?style=flat-square&color=yellow" />
   </a>
-  <a href="{self.repo.url}/commits/main">
-    <img alt="Last lesson" src="https://img.shields.io/github/last-commit/{self.repo.slug}?style=flat-square&label=last%20lesson" />
+  <a href="https://github.com/Abrarcloudengg/Daily-AI-Learning/commits/main">
+    <img alt="Last lesson" src="https://img.shields.io/github/last-commit/Abrarcloudengg/Daily-AI-Learning?style=flat-square&label=last%20lesson" />
   </a>
-  <a href="{self.repo.url}/issues">
-    <img alt="Issues" src="https://img.shields.io/github/issues/{self.repo.slug}?style=flat-square" />
+  <a href="https://github.com/Abrarcloudengg/Daily-AI-Learning/issues">
+    <img alt="Issues" src="https://img.shields.io/github/issues/Abrarcloudengg/Daily-AI-Learning?style=flat-square" />
   </a>
   <img alt="Code style" src="https://img.shields.io/badge/code%20style-ruff-261230?style=flat-square&logo=ruff&logoColor=white" />
 </p>
@@ -165,20 +65,18 @@ class ReadmeRenderer:
   <a href="#-quickstart"><b>Quickstart</b></a> ·
   <a href="#-configuration"><b>Configuration</b></a> ·
   <a href="#-architecture"><b>Architecture</b></a> ·
-  <a href="{self.repo.pages_url}"><b>Docs</b></a> ·
+  <a href="https://abrarcloudengg.github.io/Daily-AI-Learning/"><b>Docs</b></a> ·
   <a href="#-faq"><b>FAQ</b></a>
 </p>
 
-</div>"""
+</div>
 
-    def _about(self) -> str:
-        total = self.catalog.total_topics()
-        subjects = len(self.catalog.subjects)
+---
 
-        return f"""## 📖 About
+## 📖 About
 
-**Daily AI Learning** is a self-driving curriculum. It holds a {total}-topic roadmap across
-{subjects} subjects, and every day a GitHub Actions job picks up exactly where it left off,
+**Daily AI Learning** is a self-driving curriculum. It holds a 724-topic roadmap across
+15 subjects, and every day a GitHub Actions job picks up exactly where it left off,
 asks a large language model for the next lesson, validates the result, files it under
 `generated/`, refreshes this README, and commits — with nobody at the keyboard.
 
@@ -193,75 +91,62 @@ The interesting part is not the API call. It is everything around it:
 | Two runs push at once | Push **rebases and retries** instead of failing |
 | Two counters disagree about the day number | There is exactly **one** counter, derived from the lesson files |
 
-The result is a repository that keeps working when you forget it exists."""
+The result is a repository that keeps working when you forget it exists.
 
-    def _dashboard(self, progress: Progress) -> str:
-        subjects = self.catalog.subjects
-        total_topics = self.catalog.total_topics()
-        completed = self.store.global_completed(progress)
-        percent = (completed / total_topics * 100) if total_topics else 0.0
+---
 
-        subject_topics = self.catalog.topic_count(progress.subject)
-        subject_done = progress.lessons_completed
-        subject_percent = (subject_done / subject_topics * 100) if subject_topics else 0.0
-
-        return f"""## 📊 Live Progress
+## 📊 Live Progress
 
 <div align="center">
 
-`{_bar(percent)}`  **{percent:.2f}%**
+`░░░░░░░░░░░░░░░░░░░░░░░░`  **1.10%**
 
 </div>
 
 | | |
 |---|---|
-| 📚 **Current subject** | {progress.subject} |
-| 🎯 **Current topic** | {progress.current_topic or "—"} |
-| 📅 **Next lesson** | Day {progress.day} of {progress.subject} |
-| 📈 **Subject progress** | {subject_done}/{subject_topics} · {subject_percent:.1f}% |
-| ✅ **Lessons written** | {completed}/{total_topics} |
-| 📦 **Subjects finished** | {len(progress.completed_subjects)}/{len(subjects)} |
-| 🗂️ **Files on disk** | {self.library.total_count()} Markdown lessons |
+| 📚 **Current subject** | Python |
+| 🎯 **Current topic** | Match Case |
+| 📅 **Next lesson** | Day 9 of Python |
+| 📈 **Subject progress** | 8/114 · 7.0% |
+| ✅ **Lessons written** | 8/724 |
+| 📦 **Subjects finished** | 0/15 |
+| 🗂️ **Files on disk** | 8 Markdown lessons |
 
 > This table is regenerated by `daily-ai readme` on every run. Do not edit it by hand —
-> your changes will be overwritten on the next lesson."""
+> your changes will be overwritten on the next lesson.
 
-    def _roadmap(self, progress: Progress) -> str:
-        rows = []
-        for index, subject in enumerate(self.catalog.subjects, start=1):
-            topics = self.catalog.topic_count(subject)
+---
 
-            if subject in progress.completed_subjects:
-                status, done = "✅ Done", topics
-            elif subject == progress.subject:
-                status, done = "🚀 In progress", progress.lessons_completed
-            else:
-                status, done = "📘 Queued", self.library.count(subject)
-
-            percent = (done / topics * 100) if topics else 0.0
-            folder = self.catalog.lesson_folder(subject)
-            link = f"[`{folder}/`](generated/{folder})"
-            rows.append(
-                f"| {index} | **{subject}** | {status} | {done}/{topics} | `{_bar(percent, 12)}` | {link} |"
-            )
-
-        table = "\n".join(rows)
-        flow = " → ".join(self.catalog.subjects)
-
-        return f"""## 🗺️ Roadmap
+## 🗺️ Roadmap
 
 | # | Subject | Status | Lessons | Progress | Folder |
 |---:|---|---|---:|---|---|
-{table}
+| 1 | **Python** | 🚀 In progress | 8/114 | `█░░░░░░░░░░░` | [`Python/`](generated/Python) |
+| 2 | **Git** | 📘 Queued | 0/40 | `░░░░░░░░░░░░` | [`Git/`](generated/Git) |
+| 3 | **SQL** | 📘 Queued | 0/40 | `░░░░░░░░░░░░` | [`SQL/`](generated/SQL) |
+| 4 | **Linux** | 📘 Queued | 0/40 | `░░░░░░░░░░░░` | [`Linux/`](generated/Linux) |
+| 5 | **AWS** | 📘 Queued | 0/60 | `░░░░░░░░░░░░` | [`AWS/`](generated/AWS) |
+| 6 | **Docker** | 📘 Queued | 0/40 | `░░░░░░░░░░░░` | [`Docker/`](generated/Docker) |
+| 7 | **Kubernetes** | 📘 Queued | 0/40 | `░░░░░░░░░░░░` | [`Kubernetes/`](generated/Kubernetes) |
+| 8 | **HTML** | 📘 Queued | 0/30 | `░░░░░░░░░░░░` | [`HTML/`](generated/HTML) |
+| 9 | **CSS** | 📘 Queued | 0/30 | `░░░░░░░░░░░░` | [`CSS/`](generated/CSS) |
+| 10 | **JavaScript** | 📘 Queued | 0/60 | `░░░░░░░░░░░░` | [`JavaScript/`](generated/JavaScript) |
+| 11 | **React** | 📘 Queued | 0/45 | `░░░░░░░░░░░░` | [`React/`](generated/React) |
+| 12 | **Node.js** | 📘 Queued | 0/45 | `░░░░░░░░░░░░` | [`NodeJS/`](generated/NodeJS) |
+| 13 | **DSA** | 📘 Queued | 0/50 | `░░░░░░░░░░░░` | [`DSA/`](generated/DSA) |
+| 14 | **AI** | 📘 Queued | 0/60 | `░░░░░░░░░░░░` | [`AI/`](generated/AI) |
+| 15 | **LangChain** | 📘 Queued | 0/30 | `░░░░░░░░░░░░` | [`LangChain/`](generated/LangChain) |
 
 **Learning flow**
 
 ```text
-{flow}
-```"""
+Python → Git → SQL → Linux → AWS → Docker → Kubernetes → HTML → CSS → JavaScript → React → Node.js → DSA → AI → LangChain
+```
 
-    def _features(self) -> str:
-        return """## ✨ Features
+---
+
+## ✨ Features
 
 **Content**
 
@@ -280,10 +165,11 @@ The result is a repository that keeps working when you forget it exists."""
 - 🧪 Tested — pytest suite covering naming, progress, selection, and rendering
 - 📋 Real logging — levels, timestamps in CI, UTF-8 safe on Windows
 - 🧩 Typed — full type hints, `ruff` + `mypy` clean in CI
-- 🖥️ Cross-platform — identical behaviour on Windows, macOS, and Linux"""
+- 🖥️ Cross-platform — identical behaviour on Windows, macOS, and Linux
 
-    def _architecture(self) -> str:
-        return """## 🏗️ Architecture
+---
+
+## 🏗️ Architecture
 
 Every module has one job and no module reaches around another.
 
@@ -335,10 +221,11 @@ flowchart TB
 3. **Failures are typed.** Every deliberate error subclasses `DailyAILearningError`
    and carries a process exit code.
 4. **The pipeline decides, the modules execute.** Only `pipeline.py` knows the order
-   of operations."""
+   of operations.
 
-    def _workflow_diagram(self) -> str:
-        return """## 🔄 How a Run Works
+---
+
+## 🔄 How a Run Works
 
 ```mermaid
 sequenceDiagram
@@ -373,14 +260,11 @@ sequenceDiagram
         CLI->>GIT: pull --rebase, commit, push
         GIT-->>CRON: ✅ Day N: Topic
     end
-```"""
+```
 
-    def _structure(self) -> str:
-        folders = [self.catalog.lesson_folder(subject) for subject in self.catalog.subjects]
-        preview = "\n".join(f"│   ├── {folder}/" for folder in folders[:4])
-        remaining = len(folders) - 4
+---
 
-        return f"""## 📂 Project Structure
+## 📂 Project Structure
 
 ```text
 Daily-AI-Learning/
@@ -399,8 +283,11 @@ Daily-AI-Learning/
 │   └── progress.json            # Generated state (rebuilt from disk if lost)
 ├── docs/                        # GitHub Pages site
 ├── generated/                   # 📚 The lessons
-{preview}
-│   └── … {remaining} more subjects
+│   ├── Python/
+│   ├── Git/
+│   ├── SQL/
+│   ├── Linux/
+│   └── … 11 more subjects
 ├── src/daily_ai_learning/       # 🧠 The package
 │   ├── catalog.py               # Subjects and topics
 │   ├── cli.py                   # Command line interface
@@ -417,24 +304,25 @@ Daily-AI-Learning/
 │   └── settings.py              # Configuration
 ├── scripts/                     # Thin shims: legacy `python scripts/generator.py`
 └── tests/                       # pytest suite
-```"""
+```
 
-    def _quickstart(self) -> str:
-        return f"""## 🚀 Quickstart
+---
+
+## 🚀 Quickstart
 
 > **Requirements** — Python 3.10+, git, and a free [OpenRouter](https://openrouter.ai/keys) API key.
 
 ```bash
 # 1. Clone
-git clone {self.repo.url}.git
-cd {self.repo.name}
+git clone https://github.com/Abrarcloudengg/Daily-AI-Learning.git
+cd Daily-AI-Learning
 
 # 2. Create an isolated environment
 python -m venv venv
-source venv/bin/activate          # Windows: venv\\Scripts\\activate
+source venv/bin/activate          # Windows: venv\Scripts\activate
 
 # 3. Install
-pip install -e .[dev]              # add dev tools for testing, linting, and type checking
+pip install -e .                  # add "[dev]" for the test and lint tools
 
 # 4. Add your API key
 cp .env.example .env              # Windows: copy .env.example .env
@@ -462,12 +350,11 @@ python scripts/generator.py
 4. Open the **Actions** tab and enable workflows.
 
 That is the whole setup. A lesson lands every day at **15:30 UTC (21:00 IST)**, and
-you can trigger one immediately from **Actions → Daily Lesson → Run workflow**."""
+you can trigger one immediately from **Actions → Daily Lesson → Run workflow**.
 
-    def _configuration(self) -> str:
-        defaults = Settings()
+---
 
-        return f"""## ⚙️ Configuration
+## ⚙️ Configuration
 
 Three layers, each overriding the one above it.
 
@@ -475,16 +362,16 @@ Three layers, each overriding the one above it.
 
 | Key | Default | What it controls |
 |---|---|---|
-| `model` | `{defaults.model}` | Any [OpenRouter model](https://openrouter.ai/models) slug |
-| `max_tokens` | `{defaults.max_tokens}` | Response budget. Below ~6000 the template gets truncated |
-| `temperature` | `{defaults.temperature}` | Creativity. Lower is more consistent |
-| `max_retries` | `{defaults.max_retries}` | Attempts before the run gives up |
-| `retry_backoff` | `{defaults.retry_backoff}` | Seconds for the first retry; doubles each time |
-| `request_timeout` | `{defaults.request_timeout}` | Seconds to wait for one response |
-| `min_lesson_chars` | `{defaults.min_lesson_chars}` | Shorter responses are treated as truncated |
-| `lessons_per_run` | `{defaults.lessons_per_run}` | Lessons generated per invocation |
-| `log_level` | `{defaults.log_level}` | `DEBUG`, `INFO`, `WARNING`, `ERROR` |
-| `git_remote` / `git_branch` | `{defaults.git_remote}` / `{defaults.git_branch}` | Push target |
+| `model` | `qwen/qwen3-coder` | Any [OpenRouter model](https://openrouter.ai/models) slug |
+| `max_tokens` | `8000` | Response budget. Below ~6000 the template gets truncated |
+| `temperature` | `0.7` | Creativity. Lower is more consistent |
+| `max_retries` | `3` | Attempts before the run gives up |
+| `retry_backoff` | `5.0` | Seconds for the first retry; doubles each time |
+| `request_timeout` | `180.0` | Seconds to wait for one response |
+| `min_lesson_chars` | `1200` | Shorter responses are treated as truncated |
+| `lessons_per_run` | `1` | Lessons generated per invocation |
+| `log_level` | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR` |
+| `git_remote` / `git_branch` | `origin` / `main` | Push target |
 
 **2. Environment variables** — `DAILY_AI_<KEY>` overrides any of the above for one run:
 
@@ -504,22 +391,23 @@ Add a subject in three steps:
 
 ```jsonc
 // 1. config/subjects.json — append it in teaching order
-{{ "subjects": ["Python", "Git", "Rust"] }}
+{ "subjects": ["Python", "Git", "Rust"] }
 ```
 
 ```jsonc
 // 2. config/topics/rust_topics.json — the file name is the lower-cased,
 //    non-alphanumeric-stripped subject name
-{{ "subject": "Rust", "topics": ["Ownership", "Borrowing", "Lifetimes"] }}
+{ "subject": "Rust", "topics": ["Ownership", "Borrowing", "Lifetimes"] }
 ```
 
 ```bash
 # 3. Verify before the scheduler finds the mistake for you
 daily-ai validate
-```"""
+```
 
-    def _usage(self) -> str:
-        return """## 🖥️ Usage
+---
+
+## 🖥️ Usage
 
 ```bash
 daily-ai generate              # write the next lesson (default: 1)
@@ -547,10 +435,11 @@ against a checkout other than the current one.
 | `69` | The model provider failed after every retry |
 | `70` | A lesson was generated but failed the quality gate |
 | `78` | Bad configuration — usually a missing API key |
-| `130` | Interrupted with Ctrl-C |"""
+| `130` | Interrupted with Ctrl-C |
 
-    def _example_output(self) -> str:
-        return """## 📤 Example Output
+---
+
+## 📤 Example Output
 
 ```console
 $ daily-ai generate
@@ -597,10 +486,11 @@ Each generated lesson follows the same 24-section shape:
 ## Next Topic Preview
 ```
 
-📖 **Read a real one:** [`generated/Python/Day001_Variables.md`](generated/Python/Day001_Variables.md)"""
+📖 **Read a real one:** [`generated/Python/Day001_Variables.md`](generated/Python/Day001_Variables.md)
 
-    def _screenshots(self) -> str:
-        return """## 📸 Screenshots
+---
+
+## 📸 Screenshots
 
 <div align="center">
 
@@ -614,27 +504,29 @@ Each generated lesson follows the same 24-section shape:
 |---|---|
 | <img src="docs/assets/screenshot-lesson.png" alt="Generated lesson" width="420" /> | <img src="docs/assets/screenshot-readme.png" alt="README dashboard" width="420" /> |
 
-</div>"""
+</div>
 
-    def _automation(self) -> str:
-        return f"""## 🤖 Automation
+---
+
+## 🤖 Automation
 
 | Workflow | Trigger | What it does |
 |---|---|---|
-| [`daily.yml`]({self.repo.url}/blob/main/.github/workflows/daily.yml) | `schedule` 15:30 UTC · manual | Generates the next lesson and commits it |
-| [`ci.yml`]({self.repo.url}/blob/main/.github/workflows/ci.yml) | push · pull request | `ruff`, `mypy`, and `pytest` on Linux, macOS, and Windows |
-| [`pages.yml`]({self.repo.url}/blob/main/.github/workflows/pages.yml) | push to `main` | Publishes `docs/` to GitHub Pages |
-| [`release.yml`]({self.repo.url}/blob/main/.github/workflows/release.yml) | tag `v*` | Builds the package and drafts a GitHub Release |
+| [`daily.yml`](https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/.github/workflows/daily.yml) | `schedule` 15:30 UTC · manual | Generates the next lesson and commits it |
+| [`ci.yml`](https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/.github/workflows/ci.yml) | push · pull request | `ruff`, `mypy`, and `pytest` on Linux, macOS, and Windows |
+| [`pages.yml`](https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/.github/workflows/pages.yml) | push to `main` | Publishes `docs/` to GitHub Pages |
+| [`release.yml`](https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/.github/workflows/release.yml) | tag `v*` | Builds the package and drafts a GitHub Release |
 
 The daily job runs with `concurrency` enabled, so a manual run and a scheduled run can
 never race each other into a merge conflict.
 
 **Manual trigger with options:**
 
-Actions → *Daily Lesson* → *Run workflow* → set `count` (how many lessons) or `dry_run`."""
+Actions → *Daily Lesson* → *Run workflow* → set `count` (how many lessons) or `dry_run`.
 
-    def _testing(self) -> str:
-        return """## 🧪 Development
+---
+
+## 🧪 Development
 
 ```bash
 pip install -e ".[dev]"
@@ -648,10 +540,11 @@ mypy src                     # type-check
 ```
 
 The tests never touch the network and never touch your real workspace: `tests/conftest.py`
-builds a throwaway repository under `tmp_path` and points `DAILY_AI_ROOT` at it."""
+builds a throwaway repository under `tmp_path` and points `DAILY_AI_ROOT` at it.
 
-    def _future_plans(self) -> str:
-        return """## 🔭 Roadmap
+---
+
+## 🔭 Roadmap
 
 Ideas that fit the existing architecture, roughly in order of value:
 
@@ -670,10 +563,11 @@ Ideas that fit the existing architecture, roughly in order of value:
 | 🔀 | **Model fallback** | Automatically fall back to a second model when the first is unavailable |
 | 🔊 | **Audio lessons** | Text-to-speech version of each lesson for commutes |
 
-Want one of these? [Open an issue](../../issues/new/choose) — or build it and open a PR."""
+Want one of these? [Open an issue](../../issues/new/choose) — or build it and open a PR.
 
-    def _faq(self) -> str:
-        return """## ❓ FAQ
+---
+
+## ❓ FAQ
 
 <details>
 <summary><b>Does it cost anything to run?</b></summary>
@@ -734,33 +628,36 @@ itself is valid UTF-8.
 
 Yes, and it takes two files: append the subject to `config/subjects.json` and add
 `config/topics/<slug>_topics.json`. Run `daily-ai validate` to confirm the wiring.
-</details>"""
+</details>
 
-    def _contributing(self) -> str:
-        return f"""## 🤝 Contributing
+---
+
+## 🤝 Contributing
 
 Contributions are welcome — new subjects, better prompts, bug fixes, docs.
 
-1. Read [CONTRIBUTING.md]({self.repo.url}/blob/main/CONTRIBUTING.md)
+1. Read [CONTRIBUTING.md](https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/CONTRIBUTING.md)
 2. Fork, branch, and make your change
 3. Run `pytest` and `ruff check .`
 4. Open a pull request using the template
 
-Please also read the [Code of Conduct]({self.repo.url}/blob/main/CODE_OF_CONDUCT.md)
-and, for anything security-related, [SECURITY.md]({self.repo.url}/blob/main/SECURITY.md)."""
+Please also read the [Code of Conduct](https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/CODE_OF_CONDUCT.md)
+and, for anything security-related, [SECURITY.md](https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/SECURITY.md).
 
-    def _license(self) -> str:
-        return f"""## 📜 License
+---
 
-Released under the [MIT License]({self.repo.url}/blob/main/LICENSE).
+## 📜 License
+
+Released under the [MIT License](https://github.com/Abrarcloudengg/Daily-AI-Learning/blob/main/LICENSE).
 
 The generated lessons are produced by a language model. They are a study aid, not a
-substitute for official documentation — verify anything you intend to rely on."""
+substitute for official documentation — verify anything you intend to rely on.
 
-    def _credits(self) -> str:
-        return f"""## 💙 Credits
+---
 
-Built by **[Abrar Patel](https://github.com/{self.repo.owner})**.
+## 💙 Credits
+
+Built by **[Abrar Patel](https://github.com/Abrarcloudengg)**.
 
 Standing on: [OpenRouter](https://openrouter.ai) · [GitHub Actions](https://github.com/features/actions) ·
 [Requests](https://requests.readthedocs.io) · [Ruff](https://docs.astral.sh/ruff/) ·
@@ -771,17 +668,10 @@ Standing on: [OpenRouter](https://openrouter.ai) · [GitHub Actions](https://git
 
 **If this project is useful to you, a ⭐ helps others find it.**
 
-<a href="{self.repo.url}/stargazers">
-  <img src="https://img.shields.io/github/stars/{self.repo.slug}?style=social" alt="Star this repository" />
+<a href="https://github.com/Abrarcloudengg/Daily-AI-Learning/stargazers">
+  <img src="https://img.shields.io/github/stars/Abrarcloudengg/Daily-AI-Learning?style=social" alt="Star this repository" />
 </a>
 
 <sub>Every lesson in this repository was written by a machine that never misses a day.</sub>
 
-</div>"""
-
-
-def _bar(percent: float, width: int = _PROGRESS_BAR_WIDTH) -> str:
-    """Render a text progress bar, e.g. ``███░░░░░░░``."""
-    clamped = max(0.0, min(100.0, percent))
-    filled = round(width * clamped / 100)
-    return "█" * filled + "░" * (width - filled)
+</div>

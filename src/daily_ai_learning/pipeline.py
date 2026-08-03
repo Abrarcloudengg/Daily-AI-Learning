@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from .catalog import TopicCatalog
-from .exceptions import LessonGenerationError, ProviderError
+from .exceptions import LessonGenerationError
 from .git_ops import GitRepository, is_ci
 from .lessons import LessonLibrary
 from .logging_setup import get_logger

@@ -16,7 +16,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import IO, Any
+from typing import IO, Any, ClassVar
 
 __all__ = ["configure_logging", "get_logger"]
 
@@ -30,7 +30,7 @@ _configured = False
 class _LevelPrefixFormatter(logging.Formatter):
     """Prefix console records with a glyph so severity is visible at a glance."""
 
-    _PREFIXES = {
+    _PREFIXES: ClassVar[dict[int, str]] = {
         logging.DEBUG: "·",
         logging.INFO: "",
         logging.WARNING: "warning:",

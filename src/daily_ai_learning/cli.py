@@ -10,8 +10,8 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from collections.abc import Callable, Sequence
 from pathlib import Path
-from typing import Callable, Sequence
 
 from . import __version__
 from .catalog import TopicCatalog

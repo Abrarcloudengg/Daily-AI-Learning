@@ -15,8 +15,9 @@ from __future__ import annotations
 import os
 import random
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 import requests
 
@@ -213,7 +214,8 @@ class OpenRouterClient:
         if not isinstance(content, str) or not content.strip():
             raise ProviderError("Response contained an empty message.")
 
-        usage = body.get("usage") if isinstance(body.get("usage"), dict) else {}
+        usage_value = body.get("usage")
+        usage = usage_value if isinstance(usage_value, dict) else {}
 
         return Completion(
             content=content,

@@ -1,0 +1,2 @@
+[console_scripts]
+daily-ai = daily_ai_learning.cli:main

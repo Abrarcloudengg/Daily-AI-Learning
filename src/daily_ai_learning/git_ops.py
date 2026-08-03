@@ -88,7 +88,7 @@ class GitRepository:
         env = {**os.environ, **_NON_INTERACTIVE_ENV}
 
         try:
-            completed = subprocess.run(  # noqa: S603 - fixed executable, list args, no shell
+            completed = subprocess.run(
                 ["git", *args],
                 cwd=self.paths.root,
                 capture_output=True,

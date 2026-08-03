@@ -16,6 +16,7 @@ might end up in a log line or a traceback.
 from __future__ import annotations
 
 import os
+from collections.abc import Mapping
 from dataclasses import dataclass, fields
 from typing import Any, Final
 
@@ -68,7 +69,7 @@ class Settings:
     # Loading
     # ------------------------------------------------------------------
     @classmethod
-    def load(cls, paths: Paths | None = None, *, env: dict[str, str] | None = None) -> Settings:
+    def load(cls, paths: Paths | None = None, *, env: Mapping[str, str] | None = None) -> Settings:
         """Build settings from ``config/settings.json`` plus environment overrides."""
         paths = paths or Paths.discover()
         environ = os.environ if env is None else env
@@ -101,7 +102,7 @@ class Settings:
         return settings
 
     @classmethod
-    def _env_overrides(cls, environ: dict[str, str]) -> dict[str, Any]:
+    def _env_overrides(cls, environ: Mapping[str, str]) -> dict[str, Any]:
         """Collect ``DAILY_AI_<FIELD>`` variables, coerced to the field type."""
         overrides: dict[str, Any] = {}
 

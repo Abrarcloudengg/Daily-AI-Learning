@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "daily-ai-learning"
+version = "2.0.0"
+description = "A self-driving curriculum generator that writes one AI lesson per day."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Abrar Patel" }
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Development Status :: 4 - Beta",
+  "Topic :: Education",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+  "requests==2.31.0",
+  "python-dotenv==1.1.1"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.0.283",
+  "mypy>=1.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/Abrarcloudengg/Daily-AI-Learning"
+Repository = "https://github.com/Abrarcloudengg/Daily-AI-Learning"
+"Bug Tracker" = "https://github.com/Abrarcloudengg/Daily-AI-Learning/issues"
+
+[project.scripts]
+daily-ai = "daily_ai_learning.cli:main"
+
+[tool.setuptools]
+packages = ["daily_ai_learning"]
+package-dir = {"" = "src"}

@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from .catalog import TopicCatalog
-from .exceptions import CurriculumError, ProgressError
+from .exceptions import ConfigurationError, CurriculumError, ProgressError
 from .jsonio import read_json, write_json
 from .lessons import LessonLibrary
 from .logging_setup import get_logger
@@ -141,7 +141,7 @@ class ProgressStore:
 
         try:
             raw = read_json(self.paths.progress_file, description="progress file")
-        except Exception as exc:
+        except ConfigurationError as exc:
             # A corrupt progress file must not end the run: everything it holds
             # can be rebuilt from `generated/` by reconcile().
             logger.warning("Progress file unreadable (%s); rebuilding it from generated lessons.", exc)
