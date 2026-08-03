@@ -1,11 +1,16 @@
 {
     "subject": "Python",
-    "day": 11,
-    "current_topic": "Data Types",
+    "day": 9,
+    "current_topic": "Match Case",
     "completed": [
-        "Match Case",
         "Variables",
-        "Data Types"
+        "Data Types",
+        "Input and Output",
+        "Type Casting",
+        "Operators",
+        "Conditional Statements",
+        "Nested If",
+        "Match Case"
     ],
     "completed_subjects": []
 }

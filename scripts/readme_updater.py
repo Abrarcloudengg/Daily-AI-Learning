@@ -1,35 +1,26 @@
-import json
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-PROGRESS_FILE = os.path.join(BASE_DIR, "data", "progress.json")
-SUBJECTS_FILE = os.path.join(BASE_DIR, "config", "subjects.json")
-README_FILE = os.path.join(BASE_DIR, "README.md")
-
-
-def load_json(path):
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+from common import (
+    FOLDER_OVERRIDES,
+    README_FILE,
+    load_json,
+    load_progress,
+    load_subjects,
+    topic_file,
+)
 
 
-def get_total_topics():
-    total = 0
+def count_topics(subject):
+    path = topic_file(subject)
 
-    subjects = load_json(SUBJECTS_FILE)["subjects"]
+    if not os.path.exists(path):
+        return 0
 
-    for subject in subjects:
+    return len(load_json(path)["topics"])
 
-        topic_file = os.path.join(
-            BASE_DIR,
-            "config",
-            f"{subject.lower()}_topics.json"
-        )
 
-        if os.path.exists(topic_file):
-            total += len(load_json(topic_file)["topics"])
-
-    return total
+def get_total_topics(subjects):
+    return sum(count_topics(subject) for subject in subjects)
 
 
 def get_completed_topics(progress):
@@ -37,35 +28,14 @@ def get_completed_topics(progress):
     completed = len(progress.get("completed", []))
 
     for subject in progress.get("completed_subjects", []):
-
-        topic_file = os.path.join(
-            BASE_DIR,
-            "config",
-            f"{subject.lower()}_topics.json"
-        )
-
-        if os.path.exists(topic_file):
-            completed += len(load_json(topic_file)["topics"])
+        completed += count_topics(subject)
 
     return completed
 
 
-def update_readme():
+def build_roadmap(subjects, progress):
 
-    progress = load_json(PROGRESS_FILE)
-
-    subjects = load_json(SUBJECTS_FILE)["subjects"]
-
-    total_topics = get_total_topics()
-
-    completed_topics = get_completed_topics(progress)
-
-    percentage = round(
-        (completed_topics / total_topics) * 100,
-        2
-    ) if total_topics else 0
-
-    roadmap = ""
+    lines = []
 
     for subject in subjects:
 
@@ -78,7 +48,34 @@ def update_readme():
         else:
             icon = "📘"
 
-        roadmap += f"- {icon} {subject}\n"
+        lines.append(f"- {icon} {subject} ({count_topics(subject)} topics)")
+
+    return "\n".join(lines)
+
+
+def build_lesson_tree(subjects):
+
+    folders = [FOLDER_OVERRIDES.get(s, s) for s in subjects]
+
+    lines = ["generated/"]
+
+    for folder in folders[:-1]:
+        lines.append(f"├── {folder}/")
+
+    lines.append(f"└── {folders[-1]}/")
+
+    return "\n".join(lines)
+
+
+def update_readme():
+
+    progress = load_progress()
+    subjects = load_subjects()
+
+    total_topics = get_total_topics(subjects)
+    completed_topics = get_completed_topics(progress)
+
+    percentage = round((completed_topics / total_topics) * 100, 2) if total_topics else 0
 
     readme = f"""# 🚀 Daily AI Learning
 
@@ -90,18 +87,18 @@ Automatically generated programming lessons using AI.
 
 | Item | Value |
 |------|------|
-| 📚 Current Subject | {progress["subject"]} |
-| 📖 Current Day | {progress["day"]} |
-| 🎯 Current Topic | {progress["current_topic"]} |
+| 📚 Current Subject | {progress.get("subject", "-")} |
+| 📖 Current Day | {progress.get("day", 1)} |
+| 🎯 Current Topic | {progress.get("current_topic") or "-"} |
 | ✅ Completed Topics | {completed_topics}/{total_topics} |
-| 📦 Completed Subjects | {len(progress["completed_subjects"])}/{len(subjects)} |
+| 📦 Completed Subjects | {len(progress.get("completed_subjects", []))}/{len(subjects)} |
 | 📈 Progress | {percentage}% |
 
 ---
 
 # 📚 Learning Roadmap
 
-{roadmap}
+{build_roadmap(subjects, progress)}
 
 ---
 
@@ -121,6 +118,17 @@ Automatically generated programming lessons using AI.
 ---
 
 # 📂 Folder Structure
+
+```text
+Daily-AI-Learning/
+├── .github/workflows/   # Daily scheduled run
+├── config/              # Subject list + topic lists
+├── data/                # progress.json (generated state)
+├── generated/           # Lessons, one folder per subject
+├── scripts/             # Generator, topic selector, README + git helpers
+└── requirements.txt
+```
+
 ---
 
 # 📁 Generated Lessons
@@ -128,29 +136,14 @@ Automatically generated programming lessons using AI.
 Lessons are automatically generated inside:
 
 ```text
-generated/
-├── Python/
-├── Git/
-├── SQL/
-├── Linux/
-├── AWS/
-├── Docker/
-├── Kubernetes/
-├── HTML/
-├── CSS/
-├── JavaScript/
-├── React/
-├── NodeJS/
-├── DSA/
-├── AI/
-└── LangChain/
+{build_lesson_tree(subjects)}
 ```
 
 ---
 
 # 📖 Learning Flow
 
-Python → Git → SQL → Linux → AWS → Docker → Kubernetes → HTML → CSS → JavaScript → React → NodeJS → DSA → AI → LangChain
+{" → ".join(subjects)}
 
 ---
 

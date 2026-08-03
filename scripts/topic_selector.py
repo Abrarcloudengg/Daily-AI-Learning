@@ -1,30 +1,20 @@
-import json
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-PROGRESS_FILE = os.path.join(BASE_DIR, "data", "progress.json")
-SUBJECTS_FILE = os.path.join(BASE_DIR, "config", "subjects.json")
-
-
-def load_json(path):
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def save_progress(progress):
-    with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
-        json.dump(progress, f, indent=4)
+from common import (
+    load_progress,
+    load_subjects,
+    load_topics,
+    lesson_exists,
+    reconcile_completed,
+    save_progress,
+    topic_file,
+)
 
 
 def get_next_topic():
+    """Return (subject, topic) for the next lesson, or (None, None) when
+    the whole roadmap is finished."""
 
-    progress = load_json(PROGRESS_FILE)
-    subjects = load_json(SUBJECTS_FILE)["subjects"]
-
-    progress.setdefault("completed", [])
-    progress.setdefault("completed_subjects", [])
-    progress.setdefault("day", 1)
+    progress = load_progress()
+    subjects = load_subjects()
 
     subject = progress["subject"]
 
@@ -32,41 +22,41 @@ def get_next_topic():
         print(f"❌ Invalid subject: {subject}")
         return None, None
 
+    progress, dropped = reconcile_completed(progress)
+
+    if dropped:
+        print(f"⚠ Recorded as done but no lesson file found: {', '.join(dropped)}")
+        print("  These will be generated again.")
+
     while True:
 
-        topic_file = os.path.join(
-            BASE_DIR,
-            "config",
-            f"{subject.lower()}_topics.json"
-        )
+        topics = load_topics(subject)
 
-        if not os.path.exists(topic_file):
-            print(f"❌ Topic file not found: {topic_file}")
+        if topics is None:
+            print(f"❌ Topic file not found: {topic_file(subject)}")
             return None, None
 
-        topics = load_json(topic_file)["topics"]
-
         for topic in topics:
-            if topic not in progress["completed"]:
+            if topic not in progress["completed"] and not lesson_exists(subject, topic):
+                save_progress(progress)
                 return subject, topic
 
-        # Subject completed
+        # Every topic in this subject is done.
         if subject not in progress["completed_subjects"]:
             progress["completed_subjects"].append(subject)
 
         current_index = subjects.index(subject)
 
-        # All subjects completed
         if current_index == len(subjects) - 1:
             save_progress(progress)
             return None, None
 
-        # Switch to next subject
         subject = subjects[current_index + 1]
 
         progress["subject"] = subject
-        progress["completed"] = []
         progress["current_topic"] = ""
-        progress["day"] = 1
+
+        # Start the new subject from whatever already exists on disk.
+        progress, _ = reconcile_completed(progress)
 
         save_progress(progress)
