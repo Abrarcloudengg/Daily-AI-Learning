@@ -2,6 +2,7 @@ import subprocess
 
 
 def run(command):
+
     result = subprocess.run(
         command,
         shell=True,
@@ -10,8 +11,8 @@ def run(command):
     )
 
     if result.returncode != 0:
-        print(f"❌ Error: {command}")
-        print(result.stderr)
+        print(f"❌ {command}")
+        print(result.stderr.strip())
         return False
 
     return True
@@ -19,13 +20,16 @@ def run(command):
 
 def git_commit_and_push(day, topic):
 
-    print("📥 Syncing with GitHub...")
+    print("🔄 Syncing with GitHub...")
 
-    run("git pull --rebase origin main")
+    if not run("git pull --rebase --autostash origin main"):
+        print("❌ Git sync failed.")
+        return
 
     print("📦 Adding files...")
 
-    run("git add .")
+    if not run("git add ."):
+        return
 
     print("📝 Creating commit...")
 
@@ -38,15 +42,20 @@ def git_commit_and_push(day, topic):
 
     if commit.returncode != 0:
 
-        if "nothing to commit" in commit.stderr.lower():
+        output = (commit.stdout + commit.stderr).lower()
+
+        if "nothing to commit" in output:
             print("⚠ Nothing to commit.")
             return
 
-        print(commit.stderr)
+        print("❌ Commit failed")
+        print(commit.stderr.strip())
         return
 
     print("🚀 Pushing to GitHub...")
 
-    run("git push origin main")
+    if not run("git push origin main"):
+        print("❌ Push failed.")
+        return
 
     print("✅ GitHub Updated Successfully!")

@@ -1,12 +1,16 @@
 import os
 import json
 import requests
-from readme_updater import update_readme
 from dotenv import load_dotenv
+
 from topic_selector import get_next_topic
 from git_manager import git_commit_and_push
+from readme_updater import update_readme
 
-# Load .env
+# ==========================
+# Load Environment
+# ==========================
+
 load_dotenv()
 
 API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -15,18 +19,29 @@ if not API_KEY:
     print("❌ OPENROUTER_API_KEY not found.")
     exit()
 
-# Get next topic automatically
+# ==========================
+# Get Next Topic
+# ==========================
+
 subject, topic = get_next_topic()
 
-if topic is None:
-    print("✅ All topics completed.")
+if subject is None or topic is None:
+    print("✅ All subjects completed.")
     exit()
 
-# Read current progress
+# ==========================
+# Load Progress
+# ==========================
+
 with open("data/progress.json", "r", encoding="utf-8") as f:
     progress = json.load(f)
 
 day = progress["day"]
+day_number = len(progress["completed"]) + 1
+
+# ==========================
+# OpenRouter Request
+# ==========================
 
 headers = {
     "Authorization": f"Bearer {API_KEY}",
@@ -35,14 +50,14 @@ headers = {
     "X-Title": "Daily-AI-Learning"
 }
 
-data = {
+payload = {
     "model": "qwen/qwen3-coder",
     "messages": [
         {
             "role": "system",
             "content": (
                 "You are a senior programming instructor and technical writer. "
-                "Generate professional, detailed, beginner-to-advanced programming lessons in Markdown."
+                "Generate detailed, beginner-to-advanced programming lessons in clean Markdown."
             )
         },
         {
@@ -51,7 +66,7 @@ data = {
 Create a complete professional Markdown lesson.
 
 Subject: {subject}
-Day: {day}
+Day: {day_number}
 Topic: {topic}
 
 The lesson must be Beginner → Intermediate → Advanced.
@@ -111,55 +126,106 @@ Use EXACTLY this structure.
 Rules:
 
 - Return ONLY Markdown.
-- Use proper Markdown headings.
-- Explain every concept clearly.
-- Every code example must run correctly.
-- Use Python markdown code blocks.
-- Use tables wherever useful.
-- Make the lesson interview-ready.
-- Do NOT skip any section.
-- Do NOT use placeholder text.
-- Keep explanations detailed and professional.
+- Explain every concept.
+- Code must run correctly.
+- Use Markdown code blocks.
+- Use tables where useful.
+- Do not skip sections.
+- No placeholder text.
 """
         }
     ],
-    "max_tokens": 3500,
-    "temperature": 0.7
+    "temperature": 0.7,
+    "max_tokens": 3500
 }
 
-response = requests.post(
-    "https://openrouter.ai/api/v1/chat/completions",
-    headers=headers,
-    json=data,
-)
+print("🤖 Generating lesson...")
+
+try:
+
+    response = requests.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers=headers,
+        json=payload,
+        timeout=120
+    )
+
+except Exception as e:
+    print("❌ Network Error")
+    print(e)
+    exit()
 
 if response.status_code != 200:
-    print("❌ Error:", response.status_code)
+    print("❌ API Error")
+    print(response.status_code)
     print(response.text)
     exit()
 
-lesson = response.json()["choices"][0]["message"]["content"]
+result = response.json()
 
-# Create subject folder
-os.makedirs(f"generated/{subject}", exist_ok=True)
+if "choices" not in result:
+    print("❌ Invalid Response")
+    print(result)
+    exit()
 
-# Safe filename
-safe_topic = topic.replace(" ", "_").replace("/", "_")
+lesson = result["choices"][0]["message"]["content"]
 
-output_file = (
-    f"generated/{subject}/"
-    f"Day{day:03d}_{safe_topic}.md"
+# ==========================
+# Save Lesson
+# ==========================
+
+folder = os.path.join("generated", subject)
+os.makedirs(folder, exist_ok=True)
+
+safe_topic = (
+    topic.replace(" ", "_")
+    .replace("/", "_")
+    .replace("\\", "_")
+    .replace(":", "")
 )
+
+output_file = os.path.join(
+    folder,
+    f"Day{day_number:03d}_{safe_topic}.md"
+)
+
+if os.path.exists(output_file):
+    print("⚠ Lesson already exists.")
+    print(output_file)
+    exit()
 
 with open(output_file, "w", encoding="utf-8") as f:
     f.write(lesson)
 
+# ==========================
+# Update Progress
+# ==========================
+
+progress["completed"].append(topic)
+progress["current_topic"] = topic
+progress["day"] += 1
+
+with open("data/progress.json", "w", encoding="utf-8") as f:
+    json.dump(progress, f, indent=4)
+
+# ==========================
+# Update README
+# ==========================
+
 update_readme()
 
-print("✅ Lesson generated successfully!")
+# ==========================
+# Success
+# ==========================
+
+print()
+print("✅ Lesson Generated")
 print(f"📚 Subject : {subject}")
-print(f"📚 Topic   : {topic}")
+print(f"📖 Topic   : {topic}")
 print(f"📁 Saved   : {output_file}")
 
-# Commit & Push
-git_commit_and_push(day, topic)
+# ==========================
+# Git
+# ==========================
+
+git_commit_and_push(day_number, topic)

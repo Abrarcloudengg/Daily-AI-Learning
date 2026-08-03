@@ -1,14 +1,19 @@
 {
     "subjects": [
         "Python",
-        "SQL",
         "Git",
+        "SQL",
         "Linux",
+        "AWS",
+        "Docker",
+        "Kubernetes",
+        "HTML",
+        "CSS",
         "JavaScript",
         "React",
-        "NodeJS",
-        "Docker",
-        "AWS",
-        "DSA"
+        "Node.js",
+        "DSA",
+        "AI",
+        "LangChain"
     ]
 }

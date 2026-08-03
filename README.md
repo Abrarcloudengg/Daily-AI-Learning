@@ -4,30 +4,97 @@ Automatically generated programming lessons using AI.
 
 ---
 
-## 📊 Progress
+# 📊 Progress
 
 | Item | Value |
-|------|-------|
-| 📚 Subject | Python |
-| 📅 Current Day | 11 |
-| 📝 Latest Topic | Data Types |
-| ✅ Lessons Completed | 3 |
+|------|------|
+| 📚 Current Subject | Python |
+| 📖 Current Day | 3 |
+| 🎯 Current Topic | Data Types |
+| ✅ Completed Topics | 2/674 |
+| 📦 Completed Subjects | 0/15 |
+| 📈 Progress | 0.3% |
 
 ---
 
-## 📂 Subjects
+# 📚 Learning Roadmap
+
+- 🚀 Python
+- 📘 Git
+- 📘 SQL
+- 📘 Linux
+- 📘 AWS
+- 📘 Docker
+- 📘 Kubernetes
+- 📘 HTML
+- 📘 CSS
+- 📘 JavaScript
+- 📘 React
+- 📘 Node.js
+- 📘 DSA
+- 📘 AI
+- 📘 LangChain
+
+
+---
+
+# 🤖 Features
+
+- ✅ Automatic Topic Selection
+- ✅ Automatic Subject Switching
+- ✅ AI Lesson Generation
+- ✅ README Auto Update
+- ✅ Git Auto Commit
+- ✅ Git Auto Push
+- ✅ GitHub Actions
+- ✅ Beginner → Advanced
+- ✅ Mini Projects
+- ✅ Coding Exercises
+
+---
+
+# 📂 Folder Structure
+---
+
+# 📁 Generated Lessons
+
+Lessons are automatically generated inside:
+
+```text
+generated/
+├── Python/
+├── Git/
+├── SQL/
+├── Linux/
+├── AWS/
+├── Docker/
+├── Kubernetes/
+├── HTML/
+├── CSS/
+├── JavaScript/
+├── React/
+├── NodeJS/
+├── DSA/
+├── AI/
+└── LangChain/
+```
+
+---
+
+# 📖 Learning Flow
+
+Python → Git → SQL → Linux → AWS → Docker → Kubernetes → HTML → CSS → JavaScript → React → NodeJS → DSA → AI → LangChain
+
+---
+
+# 🚀 Tech Stack
 
 - Python
-- SQL
-- Git
-- Linux
-- JavaScript
-- React
-- NodeJS
-- Docker
-- AWS
-- DSA
+- OpenRouter API
+- GitHub Actions
+- Markdown
+- JSON
 
 ---
 
-🤖 Generated Automatically using OpenRouter + GitHub Actions.
+Made with ❤️ by Abrar Patel

@@ -20,13 +20,19 @@ def save_progress(progress):
 def get_next_topic():
 
     progress = load_json(PROGRESS_FILE)
-    subjects_data = load_json(SUBJECTS_FILE)
+    subjects = load_json(SUBJECTS_FILE)["subjects"]
 
-    subjects = subjects_data["subjects"]
+    progress.setdefault("completed", [])
+    progress.setdefault("completed_subjects", [])
+    progress.setdefault("day", 1)
+
+    subject = progress["subject"]
+
+    if subject not in subjects:
+        print(f"❌ Invalid subject: {subject}")
+        return None, None
 
     while True:
-
-        subject = progress["subject"]
 
         topic_file = os.path.join(
             BASE_DIR,
@@ -34,25 +40,14 @@ def get_next_topic():
             f"{subject.lower()}_topics.json"
         )
 
-        topic_data = load_json(topic_file)
+        if not os.path.exists(topic_file):
+            print(f"❌ Topic file not found: {topic_file}")
+            return None, None
 
-        topics = topic_data["topics"]
+        topics = load_json(topic_file)["topics"]
 
-        completed = progress["completed"]
-
-        # Next topic
         for topic in topics:
-
-            if topic not in completed:
-
-                completed.append(topic)
-
-                progress["completed"] = completed
-                progress["current_topic"] = topic
-                progress["day"] += 1
-
-                save_progress(progress)
-
+            if topic not in progress["completed"]:
                 return subject, topic
 
         # Subject completed
@@ -62,17 +57,16 @@ def get_next_topic():
         current_index = subjects.index(subject)
 
         # All subjects completed
-        if current_index + 1 >= len(subjects):
-
+        if current_index == len(subjects) - 1:
             save_progress(progress)
             return None, None
 
-        # Switch subject
-        next_subject = subjects[current_index + 1]
+        # Switch to next subject
+        subject = subjects[current_index + 1]
 
-        progress["subject"] = next_subject
-        progress["day"] = 0
-        progress["current_topic"] = ""
+        progress["subject"] = subject
         progress["completed"] = []
+        progress["current_topic"] = ""
+        progress["day"] = 1
 
         save_progress(progress)
