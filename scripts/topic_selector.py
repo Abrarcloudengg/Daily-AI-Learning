@@ -1,62 +1,50 @@
-from common import (
-    load_progress,
-    load_subjects,
-    load_topics,
-    lesson_exists,
-    reconcile_completed,
-    save_progress,
-    topic_file,
-)
+"""Deprecated compatibility layer for ``scripts/topic_selector.py``.
+
+Modern equivalent::
+
+    from daily_ai_learning.selector import TopicSelector
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+_SRC = Path(__file__).resolve().parent.parent / "src"
+if _SRC.is_dir() and str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
+from daily_ai_learning.catalog import TopicCatalog  # noqa: E402
+from daily_ai_learning.lessons import LessonLibrary  # noqa: E402
+from daily_ai_learning.paths import Paths  # noqa: E402
+from daily_ai_learning.progress import ProgressStore  # noqa: E402
+from daily_ai_learning.selector import TopicSelector  # noqa: E402
+
+__all__ = ["get_next_topic"]
 
 
-def get_next_topic():
-    """Return (subject, topic) for the next lesson, or (None, None) when
-    the whole roadmap is finished."""
+def get_next_topic() -> tuple[str | None, str | None]:
+    """Return ``(subject, topic)`` for the next lesson, or ``(None, None)``.
 
-    progress = load_progress()
-    subjects = load_subjects()
+    Deprecated. Use :class:`daily_ai_learning.selector.TopicSelector`, which
+    also reports the day number and the position within the subject.
+    """
+    paths = Paths.discover()
+    catalog = TopicCatalog(paths)
+    library = LessonLibrary(paths)
+    store = ProgressStore(paths, catalog, library)
 
-    subject = progress["subject"]
+    progress = store.load()
+    selection = TopicSelector(paths, catalog, library, store).select(progress)
+    store.save(progress)
 
-    if subject not in subjects:
-        print(f"❌ Invalid subject: {subject}")
+    if selection is None:
         return None, None
 
-    progress, dropped = reconcile_completed(progress)
+    return selection.subject, selection.topic
 
-    if dropped:
-        print(f"⚠ Recorded as done but no lesson file found: {', '.join(dropped)}")
-        print("  These will be generated again.")
 
-    while True:
+if __name__ == "__main__":
+    from daily_ai_learning.cli import main
 
-        topics = load_topics(subject)
-
-        if topics is None:
-            print(f"❌ Topic file not found: {topic_file(subject)}")
-            return None, None
-
-        for topic in topics:
-            if topic not in progress["completed"] and not lesson_exists(subject, topic):
-                save_progress(progress)
-                return subject, topic
-
-        # Every topic in this subject is done.
-        if subject not in progress["completed_subjects"]:
-            progress["completed_subjects"].append(subject)
-
-        current_index = subjects.index(subject)
-
-        if current_index == len(subjects) - 1:
-            save_progress(progress)
-            return None, None
-
-        subject = subjects[current_index + 1]
-
-        progress["subject"] = subject
-        progress["current_topic"] = ""
-
-        # Start the new subject from whatever already exists on disk.
-        progress, _ = reconcile_completed(progress)
-
-        save_progress(progress)
+    sys.exit(main(["next"]))

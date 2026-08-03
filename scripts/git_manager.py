@@ -1,59 +1,31 @@
-import subprocess
+"""Deprecated compatibility layer for ``scripts/git_manager.py``.
 
-from common import BASE_DIR
+Modern equivalent::
+
+    from daily_ai_learning.git_ops import GitRepository
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+_SRC = Path(__file__).resolve().parent.parent / "src"
+if _SRC.is_dir() and str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
+from daily_ai_learning.git_ops import GitRepository  # noqa: E402
+from daily_ai_learning.paths import Paths  # noqa: E402
+from daily_ai_learning.settings import Settings  # noqa: E402
+
+__all__ = ["git_commit_and_push"]
 
 
-def run(args, allow_fail=False):
-    """Run a git command as an argument list (no shell), from the repo root."""
+def git_commit_and_push(day: int, topic: str) -> bool:
+    """Sync, commit ``Day <day>: <topic>``, and push.
 
-    result = subprocess.run(
-        args,
-        cwd=BASE_DIR,
-        capture_output=True,
-        text=True,
-    )
-
-    if result.returncode != 0 and not allow_fail:
-        print(f"❌ {' '.join(args)}")
-        print(result.stderr.strip())
-
-    return result
-
-
-def git_commit_and_push(day, topic):
-
-    print("🔄 Syncing with GitHub...")
-
-    if run(["git", "pull", "--rebase", "--autostash", "origin", "main"]).returncode != 0:
-        print("❌ Git sync failed.")
-        return
-
-    print("📦 Adding files...")
-
-    if run(["git", "add", "-A"]).returncode != 0:
-        return
-
-    print("📝 Creating commit...")
-
-    # Passed as a list, so quotes or $ in a topic name can't break the command.
-    commit = run(["git", "commit", "-m", f"Day {day}: {topic}"], allow_fail=True)
-
-    if commit.returncode != 0:
-
-        output = (commit.stdout + commit.stderr).lower()
-
-        if "nothing to commit" in output:
-            print("⚠ Nothing to commit.")
-            return
-
-        print("❌ Commit failed")
-        print((commit.stderr or commit.stdout).strip())
-        return
-
-    print("🚀 Pushing to GitHub...")
-
-    if run(["git", "push", "origin", "main"]).returncode != 0:
-        print("❌ Push failed.")
-        return
-
-    print("✅ GitHub Updated Successfully!")
+    Deprecated. Use :class:`daily_ai_learning.git_ops.GitRepository`.
+    """
+    paths = Paths.discover()
+    repository = GitRepository(paths, Settings.load(paths))
+    return repository.commit_and_push(f"Day {day}: {topic}")
