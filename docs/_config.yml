@@ -1,0 +1,13 @@
+title: Daily AI Learning
+description: An autonomous curriculum generator — one AI-written programming lesson every day, committed by GitHub Actions.
+theme: jekyll-theme-cayman
+
+show_downloads: false
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+exclude:
+  - README.md

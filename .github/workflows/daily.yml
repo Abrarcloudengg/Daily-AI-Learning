@@ -1,67 +1,140 @@
-name: Daily AI Learning
+name: Daily Lesson
 
+# The heartbeat of the project: one lesson a day, generated, committed and
+# pushed without a human touching anything.
+#
+#   schedule          -> 15:30 UTC == 21:00 IST, every day
+#   workflow_dispatch -> the "Run workflow" button, with knobs
 on:
-  workflow_dispatch:
-
   schedule:
-    - cron: '30 15 * * *'
+    - cron: "30 15 * * *"
+
+  workflow_dispatch:
+    inputs:
+      count:
+        description: "How many lessons to generate in this run"
+        required: false
+        default: "1"
+        type: string
+      dry_run:
+        description: "Pick the next topic and print it, but write nothing"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
 
+# Never let a scheduled run and a manual run race each other into the same
+# branch. Queue instead of cancelling — a cancelled run can leave a lesson on
+# disk with no matching commit.
 concurrency:
-  group: daily-ai-learning
+  group: daily-lesson
   cancel-in-progress: false
 
 jobs:
   generate:
-
+    name: Generate lesson
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          # Full history so `git pull --rebase` has something to rebase onto.
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            pyproject.toml
 
-      - name: Install Dependencies
+      - name: Install package
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
           python -m pip install -e .
 
-      - name: Validate Workspace
-        run: python -m daily_ai_learning validate
-
-      - name: Run Generator
+      # Fail in two seconds with a readable message instead of ninety seconds
+      # into an API call with a 401.
+      - name: Check API key is configured
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: daily-ai generate
-
-      - name: Commit Changes
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          if [ -z "${OPENROUTER_API_KEY}" ]; then
+            echo "::error title=Missing secret::OPENROUTER_API_KEY is not set."
+            echo "Add it under Settings -> Secrets and variables -> Actions -> New repository secret."
+            echo "Get a free key at https://openrouter.ai/keys"
+            exit 1
+          fi
+          echo "OPENROUTER_API_KEY is present (${#OPENROUTER_API_KEY} chars)."
 
-          git add -A
+      - name: Validate curriculum
+        run: daily-ai validate
+
+      - name: Show environment diagnostics
+        run: daily-ai doctor
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+
+      - name: Generate lesson
+        id: generate
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          ARGS="--count ${{ inputs.count || '1' }}"
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          # --no-git: the commit step below owns pushing, so the pipeline must
+          # not try to do it as well.
+          daily-ai generate $ARGS --no-git --log-level INFO
+
+      - name: Commit and push
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          set -euo pipefail
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Only the paths this workflow is allowed to change. `git add -A`
+          # would happily commit stray build output.
+          git add generated data/progress.json README.md
 
           if git diff --cached --quiet; then
-            echo "Nothing to commit."
+            echo "::notice title=No changes::Nothing new was generated; the roadmap may be complete."
             exit 0
           fi
 
-          MSG=$(python -c "import json;p=json.load(open('data/progress.json'));print('Day %d: %s' % (len(p['completed']), p['current_topic']))")
+          MESSAGE=$(daily-ai status --commit-message)
+          git commit -m "${MESSAGE}"
 
-          git commit -m "$MSG"
+          # A scheduled run can race a local push. Rebase, then push; retry the
+          # whole dance once if someone landed a commit in between.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              echo "Pushed on attempt ${attempt}."
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed; retrying."
+            sleep 5
+          done
 
-          # A scheduled run can race with a local push; rebase before pushing.
-          git pull --rebase origin main
-          git push origin main
+          echo "::error title=Push failed::Could not push after 3 attempts."
+          exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Daily AI Learning"
+            echo
+            daily-ai status || true
+          } >> "$GITHUB_STEP_SUMMARY"

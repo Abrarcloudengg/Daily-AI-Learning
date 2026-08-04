@@ -48,7 +48,7 @@
 
 ## 📖 About
 
-**Daily AI Learning** is a self-driving curriculum. It holds a 724-topic roadmap across
+**Daily AI Learning** is a self-driving curriculum. It holds a 740-topic roadmap across
 15 subjects, and every day a GitHub Actions job picks up exactly where it left off,
 asks a large language model for the next lesson, validates the result, files it under
 `generated/`, refreshes this README, and commits — with nobody at the keyboard.
@@ -72,7 +72,7 @@ The result is a repository that keeps working when you forget it exists.
 
 <div align="center">
 
-`░░░░░░░░░░░░░░░░░░░░░░░░`  **1.10%**
+`░░░░░░░░░░░░░░░░░░░░░░░░`  **1.08%**
 
 </div>
 
@@ -82,7 +82,7 @@ The result is a repository that keeps working when you forget it exists.
 | 🎯 **Current topic** | Match Case |
 | 📅 **Next lesson** | Day 9 of Python |
 | 📈 **Subject progress** | 8/114 · 7.0% |
-| ✅ **Lessons written** | 8/724 |
+| ✅ **Lessons written** | 8/740 |
 | 📦 **Subjects finished** | 0/15 |
 | 🗂️ **Files on disk** | 8 Markdown lessons |
 
@@ -107,7 +107,7 @@ The result is a repository that keeps working when you forget it exists.
 | 10 | **JavaScript** | 📘 Queued | 0/60 | `░░░░░░░░░░░░` | [`JavaScript/`](generated/JavaScript) |
 | 11 | **React** | 📘 Queued | 0/45 | `░░░░░░░░░░░░` | [`React/`](generated/React) |
 | 12 | **Node.js** | 📘 Queued | 0/45 | `░░░░░░░░░░░░` | [`NodeJS/`](generated/NodeJS) |
-| 13 | **DSA** | 📘 Queued | 0/50 | `░░░░░░░░░░░░` | [`DSA/`](generated/DSA) |
+| 13 | **DSA** | 📘 Queued | 0/66 | `░░░░░░░░░░░░` | [`DSA/`](generated/DSA) |
 | 14 | **AI** | 📘 Queued | 0/60 | `░░░░░░░░░░░░` | [`AI/`](generated/AI) |
 | 15 | **LangChain** | 📘 Queued | 0/30 | `░░░░░░░░░░░░` | [`LangChain/`](generated/LangChain) |
 

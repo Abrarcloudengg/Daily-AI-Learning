@@ -1,19 +1,62 @@
-﻿# Virtual Environment
-venv/
-
-# Environment Variables
+# ---------------------------------------------------------------------------
+# Secrets — never commit these. `daily-ai doctor` fails loudly if .env is ever
+# tracked, because an OpenRouter key in git history is a key you have to rotate.
+# ---------------------------------------------------------------------------
 .env
+.env.*
+!.env.example
 
+# ---------------------------------------------------------------------------
 # Python
+# ---------------------------------------------------------------------------
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 
-# VS Code
+# Build / packaging output
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+*.whl
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+.tox/
+.nox/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# ---------------------------------------------------------------------------
+# Project runtime output
+# ---------------------------------------------------------------------------
+logs/
+*.log
+
+# ---------------------------------------------------------------------------
+# Editors
+# ---------------------------------------------------------------------------
 .vscode/
+.idea/
+*.swp
+*~
 
-# OS Files
+# ---------------------------------------------------------------------------
+# OS noise
+# ---------------------------------------------------------------------------
 .DS_Store
 Thumbs.db
 desktop.ini

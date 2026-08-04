@@ -1,0 +1,17 @@
+# Normalise line endings so a lesson generated on Windows and one generated on
+# an Actions runner produce byte-identical diffs.
+* text=auto eol=lf
+
+*.bat  text eol=crlf
+*.ps1  text eol=crlf
+
+*.png  binary
+*.jpg  binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+
+# Generated lessons dominate the diff view on GitHub; mark them so the language
+# bar reflects the actual source code instead of the curriculum.
+generated/**  linguist-generated=true
+docs/**       linguist-documentation=true

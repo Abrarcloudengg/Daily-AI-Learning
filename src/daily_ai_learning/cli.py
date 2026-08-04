@@ -86,9 +86,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     generate.set_defaults(handler=_cmd_generate)
 
+    status = subparsers.add_parser(
+        "status",
+        parents=[common],
+        help="Show a progress dashboard.",
+        description="Show a progress dashboard.",
+    )
+    status.add_argument(
+        "--commit-message",
+        action="store_true",
+        help="Print a one-line commit message for the most recent lesson, and nothing else. "
+        "Used by the GitHub Actions workflow.",
+    )
+    status.set_defaults(handler=_cmd_status)
+
     for name, handler, help_text in (
         ("next", _cmd_next, "Show the next topic without generating it."),
-        ("status", _cmd_status, "Show a progress dashboard."),
         ("readme", _cmd_readme, "Regenerate README.md. Costs nothing."),
         ("validate", _cmd_validate, "Check every configuration file for problems."),
         ("doctor", _cmd_doctor, "Diagnose the environment before a run."),
@@ -204,6 +217,14 @@ def _cmd_status(args: argparse.Namespace, paths: Paths, settings: Settings) -> i
 
     result = store.load_reconciled()
     progress = result.progress
+
+    # `--commit-message` is machine-readable output, so it goes to stdout on its
+    # own while every other line of this command goes to stderr via the logger.
+    if getattr(args, "commit_message", False):
+        done = store.global_completed(progress)
+        topic = progress.current_topic or "lesson"
+        print(f"Day {done}: {topic} ({progress.subject})")
+        return 0
 
     total = catalog.total_topics()
     done = store.global_completed(progress)
