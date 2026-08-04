@@ -22,7 +22,7 @@ jobs:
     name: Lint and type check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -61,7 +61,7 @@ jobs:
             python-version: "3.12"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -91,7 +91,7 @@ jobs:
     name: End-to-end smoke test (no API calls)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
