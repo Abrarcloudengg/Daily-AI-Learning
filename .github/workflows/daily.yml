@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # Full history so `git pull --rebase` has something to rebase onto.
           fetch-depth: 0
