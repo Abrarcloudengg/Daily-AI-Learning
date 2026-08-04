@@ -12,6 +12,7 @@ character.
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import os
 import sys
@@ -53,10 +54,8 @@ def _make_console_stream(stream: IO[str]) -> IO[str]:
     """
     reconfigure = getattr(stream, "reconfigure", None)
     if callable(reconfigure):
-        try:
+        with contextlib.suppress(AttributeError, ValueError, OSError):
             reconfigure(encoding="utf-8", errors="replace")
-        except (AttributeError, ValueError, OSError):
-            pass
     return stream
 
 

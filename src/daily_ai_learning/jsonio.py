@@ -71,7 +71,7 @@ def write_json(path: Path, payload: Any, *, indent: int = 4) -> None:
         temp_path = Path(handle.name)
 
     try:
-        os.replace(temp_path, path)
+        temp_path.replace(path)
     except BaseException:
         temp_path.unlink(missing_ok=True)
         raise

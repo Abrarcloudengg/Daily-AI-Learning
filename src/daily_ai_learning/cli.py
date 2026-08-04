@@ -137,7 +137,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     except DailyAILearningError:
         # Configure logging with defaults so the error itself is printable.
         configure_logging("INFO", log_file=args.log_file, force=True)
-        raise SystemExit(_report(sys.exc_info()[1]))
+        raise SystemExit(_report(sys.exc_info()[1])) from None
 
     configure_logging(args.log_level or settings.log_level, log_file=args.log_file, force=True)
 
@@ -194,7 +194,7 @@ def _cmd_generate(args: argparse.Namespace, paths: Paths, settings: Settings) ->
     return 0
 
 
-def _cmd_next(args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
+def _cmd_next(_args: argparse.Namespace, paths: Paths, _settings: Settings) -> int:
     catalog = TopicCatalog(paths)
     library = LessonLibrary(paths)
     store = ProgressStore(paths, catalog, library)
@@ -210,7 +210,7 @@ def _cmd_next(args: argparse.Namespace, paths: Paths, settings: Settings) -> int
     return 0
 
 
-def _cmd_status(args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
+def _cmd_status(args: argparse.Namespace, paths: Paths, _settings: Settings) -> int:
     catalog = TopicCatalog(paths)
     library = LessonLibrary(paths)
     store = ProgressStore(paths, catalog, library)
@@ -255,7 +255,7 @@ def _cmd_status(args: argparse.Namespace, paths: Paths, settings: Settings) -> i
     return 0
 
 
-def _cmd_readme(args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
+def _cmd_readme(_args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
     catalog = TopicCatalog(paths)
     library = LessonLibrary(paths)
     store = ProgressStore(paths, catalog, library)
@@ -267,7 +267,7 @@ def _cmd_readme(args: argparse.Namespace, paths: Paths, settings: Settings) -> i
     return 0
 
 
-def _cmd_validate(args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
+def _cmd_validate(_args: argparse.Namespace, paths: Paths, _settings: Settings) -> int:
     catalog = TopicCatalog(paths)
     issues = catalog.validate()
 
@@ -292,7 +292,7 @@ def _cmd_validate(args: argparse.Namespace, paths: Paths, settings: Settings) ->
     return 65 if errors else 0
 
 
-def _cmd_doctor(args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
+def _cmd_doctor(_args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
     """Check everything a successful run depends on."""
     checks: list[tuple[str, bool, str]] = []
 
@@ -352,7 +352,7 @@ def _cmd_doctor(args: argparse.Namespace, paths: Paths, settings: Settings) -> i
     return 0
 
 
-def _cmd_version(args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
+def _cmd_version(_args: argparse.Namespace, paths: Paths, settings: Settings) -> int:
     logger.info("daily-ai %s", __version__)
     logger.info("python  %s", sys.version.split()[0])
     logger.info("root    %s", paths.root)

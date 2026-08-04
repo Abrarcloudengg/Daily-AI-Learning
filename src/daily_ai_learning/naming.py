@@ -37,7 +37,7 @@ FOLDER_OVERRIDES: dict[str, str] = {
 LESSON_FILENAME_PATTERN = re.compile(r"^Day(?P<day>\d+)_(?P<stem>.+)\.md$")
 
 _NON_SLUG_CHARS = re.compile(r"[^a-z0-9]")
-_ILLEGAL_PATH_CHARS = str.maketrans({char: "" for char in '/\\:*?"<>|'})
+_ILLEGAL_PATH_CHARS = str.maketrans(dict.fromkeys('/\\:*?"<>|', ""))
 _WHITESPACE = re.compile(r"\s+")
 
 
