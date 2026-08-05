@@ -1,7 +1,7 @@
 {
     "subject": "Python",
-    "day": 11,
-    "current_topic": "For Loop",
+    "day": 12,
+    "current_topic": "Break Statement",
     "completed": [
         "Variables",
         "Data Types",
@@ -12,7 +12,8 @@
         "Nested If",
         "Match Case",
         "While Loop",
-        "For Loop"
+        "For Loop",
+        "Break Statement"
     ],
     "completed_subjects": []
 }
