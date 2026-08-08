@@ -1,7 +1,7 @@
 {
     "subject": "Python",
-    "day": 13,
-    "current_topic": "Continue Statement",
+    "day": 14,
+    "current_topic": "Pass Statement",
     "completed": [
         "Variables",
         "Data Types",
@@ -14,7 +14,8 @@
         "While Loop",
         "For Loop",
         "Break Statement",
-        "Continue Statement"
+        "Continue Statement",
+        "Pass Statement"
     ],
     "completed_subjects": []
 }
