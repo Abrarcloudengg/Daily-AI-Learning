@@ -1,7 +1,7 @@
 {
     "subject": "Python",
-    "day": 15,
-    "current_topic": "Range Function",
+    "day": 16,
+    "current_topic": "Functions",
     "completed": [
         "Variables",
         "Data Types",
@@ -16,7 +16,8 @@
         "Break Statement",
         "Continue Statement",
         "Pass Statement",
-        "Range Function"
+        "Range Function",
+        "Functions"
     ],
     "completed_subjects": []
 }
