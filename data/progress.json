@@ -1,7 +1,7 @@
 {
     "subject": "Python",
-    "day": 19,
-    "current_topic": "Keyword Arguments",
+    "day": 20,
+    "current_topic": "Variable Length Arguments",
     "completed": [
         "Variables",
         "Data Types",
@@ -20,7 +20,8 @@
         "Functions",
         "Function Arguments",
         "Default Arguments",
-        "Keyword Arguments"
+        "Keyword Arguments",
+        "Variable Length Arguments"
     ],
     "completed_subjects": []
 }
