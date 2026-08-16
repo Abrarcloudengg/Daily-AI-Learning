@@ -1,7 +1,7 @@
 {
     "subject": "Python",
-    "day": 21,
-    "current_topic": "Lambda Functions",
+    "day": 22,
+    "current_topic": "Recursion",
     "completed": [
         "Variables",
         "Data Types",
@@ -22,7 +22,8 @@
         "Default Arguments",
         "Keyword Arguments",
         "Variable Length Arguments",
-        "Lambda Functions"
+        "Lambda Functions",
+        "Recursion"
     ],
     "completed_subjects": []
 }
