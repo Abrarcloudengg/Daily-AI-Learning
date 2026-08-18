@@ -1,7 +1,7 @@
 {
     "subject": "Python",
-    "day": 23,
-    "current_topic": "Scope (Local and Global)",
+    "day": 24,
+    "current_topic": "Strings",
     "completed": [
         "Variables",
         "Data Types",
@@ -24,7 +24,8 @@
         "Variable Length Arguments",
         "Lambda Functions",
         "Recursion",
-        "Scope (Local and Global)"
+        "Scope (Local and Global)",
+        "Strings"
     ],
     "completed_subjects": []
 }
